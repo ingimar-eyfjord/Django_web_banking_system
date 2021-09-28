@@ -34,3 +34,9 @@ def signup(request):
                         'error' : 'Passwords did not match - please try again'
                         }
     return render(request, 'registration/signup.html', context)
+
+@login_required
+def staff_home(request, pk):
+    if user:
+        if user.is_staff:
+            return render(request, 'banking_app_templates/staff_home.html', context)
