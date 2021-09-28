@@ -14,7 +14,7 @@ class Customer(models.Model):
 
 class Account(models.Model):
     account_id = models.IntegerField(max_length=50)
-    is_loan = models.BooleanField()
+    is_loan = models.BooleanField(False)
     username = models.CharField(max_length=150)
 
 

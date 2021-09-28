@@ -16,8 +16,13 @@ def signup(request):
     if request.method == "POST":
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        user_name = request.POST['user']
-        email = request.POST['user']
+        username = request.POST['user']
+        email = request.POST['email']
+        is_active = True
+        last_login= now
+        date_joined = now
+        is_staff = False
+        is_superuser = False
         if password == confirm_password:
             if User.objects.create_user(user_name, email, password):
                 return render(request, 'banking_app_templates/index.html', context)
