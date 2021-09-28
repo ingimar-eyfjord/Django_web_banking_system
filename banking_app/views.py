@@ -6,11 +6,17 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 def index(request):
-    return render(request, 'banking_app_templates/index.html', context)
+    context = {
+            'user' : "Ingimar"
+              }
+    return render(request, 'banking_templates/index.html', context)
 
 @login_required
 def user_account(request, pk):
-    return render(request, 'banking_app_templates/accounts.html', context)
+    context = {
+        'user' : "Ingimar"
+            }
+    return render(request, 'banking_templates/accounts.html', context)
 
 def signup(request):
     context = {}
@@ -25,7 +31,7 @@ def signup(request):
         is_staff = False
         if password == confirm_password:
             if User.objects.create_user(username, email, password, is_active, last_login, date_joined, is_staff):
-                return render(request, 'banking_app_templates/index.html', context)
+                return render(request, 'banking_templates/index.html', context)
             else:
                 context = {
                         'error' : 'Could not create user account - please try again.'
@@ -40,6 +46,6 @@ def signup(request):
 @login_required
 def staff_home(request, pk):
         if request.user.is_staff:
-            return render(request, 'banking_app_templates/staff_home.html', context)
+            return render(request, 'banking_templates/staff_home.html', context)
         else:
-            return render(request, 'banking_app_templates/index.html', context)
+            return render(request, 'banking_templates/index.html', context)
