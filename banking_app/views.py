@@ -37,6 +37,7 @@ def signup(request):
 
 @login_required
 def staff_home(request, pk):
-    if user:
-        if user.is_staff:
+        if request.user.is_staff:
             return render(request, 'banking_app_templates/staff_home.html', context)
+        else:
+            return render(request, 'banking_app_templates/index.html', context)

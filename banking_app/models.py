@@ -9,7 +9,7 @@ class Customer(models.Model):
 
 class Ledger(models.Model):
     account_id = models.ForeignKey(Account)
-    amount = models.IntegerField(max_length=225)
+    amount = models.DecimalField(max_digits=225, decimal_places=2)
     transaction_date = models.DateTimeField.auto_now_add
     transaction_id = models.IntegerField(max_length=150)
 
