@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Customer, Accounts
+from .models import Customer, Account
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -29,10 +30,11 @@ def signup(request):
                 context = {
                         'error' : 'Could not create user account - please try again.'
                         }
-            else:
-                context = {
+        else:
+            context = {
                         'error' : 'Passwords did not match - please try again'
                         }
+
     return render(request, 'registration/signup.html', context)
 
 @login_required
