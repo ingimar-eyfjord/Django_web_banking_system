@@ -17,3 +17,11 @@ class Account(models.Model):
     is_loan = models.BooleanField()
     username = models.CharField(max_length=150)
 
+
+class Ledger(models.Model):
+    credit = models.IntegerField(max_length=225)
+    debit = models.IntegerField(max_length=225)
+    transaction_date = models.DateTimeField.auto_now_add
+    transaction_id = models.IntegerField(max_length=150)
+
+
