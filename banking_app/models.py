@@ -4,7 +4,16 @@ from phonenumber_filed.modelfields import PhoneNumberField
 
 class Customer(models.Model):
     user = models.OneToOneField(User, primary_key=True)
-    ranking = models.CharField(max_length=30)
+    ranking_choices = [
+            ('G', 'Gold'),
+            ('S', 'Silver'),
+            ('B', 'Basic'),
+    ]
+    ranking = models.CharField(
+            max_length=15,
+            choices=ranking_choices,
+            default='B',
+    )
     phone_number = PhoneNumberField()
 
 class Ledger(models.Model):
