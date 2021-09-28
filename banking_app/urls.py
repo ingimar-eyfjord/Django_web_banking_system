@@ -6,6 +6,6 @@ app_name = 'banking_app'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('my-accounts<int:pk>/', views.user_account, name='user_account'),
-    path('signup/', views.SignUpView, name='signup'),
+    path('my-accounts/<int:pk>/', views.user_account, name='user_account'),
+    path('signup/', views.signup, name='signup'),
 ]
