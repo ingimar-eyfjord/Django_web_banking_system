@@ -1,6 +1,21 @@
 {% extends "banking_templates/base.html" %}
 
 {% block content %}
+{% if user.is_authenticated %}
+<h1>Welcome back {{ user }}</h1>
+<nav>
+    <a href="{% url banking_app:user_account %}">My accounts</a>
+    <a href="{% url 'logout' %}">Log out</a>
+</nav>
+{% if user.is_staff %}
+<a href="{% url banking_app:staff_home %}">Go to Staff view</a>
+{% else %}
+<h1>Welcome to PayLater Bank</h2>
+<nav>
+    <a href="{% url 'login' %}">Log in</a>
+</nav>
+{% endif %}
+
 
 <hr />
 
