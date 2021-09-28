@@ -10,14 +10,14 @@
    {% if user.is_authenticated %}
    <h1>Welcome back {{ user }}</h1>
    <nav>
-       <a href="{% url banking_app:my-accounts %}">My accounts</a>
+       <a href="{% url banking_app:user_account %}">My accounts</a>
        <a href="{% url 'logout' %}">Log out</a>
    </nav>
    {% else %}
    <h1>Welcome to PayLater Bank</h2>
    <nav>
         <a href="{% url 'login' %}">Log in</a>
-        <a href="{% url 'signup' %}">Sign up</a>
+        <a href="{% url banking_app:signup %}">Sign up</a>
     </nav>
    {% endif %}
 
