@@ -20,7 +20,7 @@ def signup(request):
         email = request.POST['user']
         if password == confirm_password:
             if User.objects.create_user(user_name, email, password):
-                return render(request, 'mkgif/index.html', context)
+                return render(request, 'banking_app_templates/index.html', context)
             else:
                 context = {
                         'error' : 'Could not create user account - please try again.'
