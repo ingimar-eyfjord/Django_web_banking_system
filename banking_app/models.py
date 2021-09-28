@@ -1,5 +1,4 @@
 from django.db import models
-from phonenumber_filed.modelfields import PhoneNumberField
 
 
 class Customer(models.Model):
@@ -14,7 +13,7 @@ class Customer(models.Model):
             choices=ranking_choices,
             default='B',
     )
-    phone_number = PhoneNumberField()
+    phone_number = models.CharField(max_length=20)
 
 class Ledger(models.Model):
     account_id = models.ForeignKey(Account)
@@ -28,5 +27,5 @@ class Account(models.Model):
 
     @property
     def balance(self):
-    return Ledger.object.filter(account_id=self).aggragate(Sum('amount'))
+        return Ledger.object.filter(account_id=self).aggragate(Sum('amount'))
 
