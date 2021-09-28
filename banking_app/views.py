@@ -22,9 +22,8 @@ def signup(request):
         last_login= now
         date_joined = now
         is_staff = False
-        is_superuser = False
         if password == confirm_password:
-            if User.objects.create_user(user_name, email, password):
+            if User.objects.create_user(username, email, password, is_active, last_login, date_joined, is_staff):
                 return render(request, 'banking_app_templates/index.html', context)
             else:
                 context = {
