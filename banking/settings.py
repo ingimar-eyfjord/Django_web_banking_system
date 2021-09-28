@@ -26,9 +26,11 @@ SECRET_KEY = 'django-insecure-_pnkdji8nq-3sfrf=n=l#yem!&0e3su)l9qc16+xou=7rax9+o
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'banking_app'
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
