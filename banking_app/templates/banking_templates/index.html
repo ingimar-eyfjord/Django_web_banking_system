@@ -1,53 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<<<<<<< HEAD
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="https://classless.de/classless.css">
-   <title>PayLater Bank</title>
-</head>
-<body>
-   {% if user.is_authenticated %}
-   <h1>Welcome back {{ user }}</h1>
-   <nav>
-       <a href="{% url banking_app:user_account %}">My accounts</a>
-       <a href="{% url 'logout' %}">Log out</a>
-   </nav>
-   {% else %}
-   <h1>Welcome to PayLater Bank</h2>
-   <nav>
-        <a href="{% url 'login' %}">Log in</a>
-    </nav>
-   {% endif %}
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://classless.de/classless.css">
-        <title>PayLater Bank</title>
-    </head>
-    <body>
-        {% if user.is_authenticated %}
-        <h1>Welcome back {{ user }}</h1>
-        <nav>
-            <a href="{% url banking_app:user_account %}">My accounts</a>
-            <a href="{% url 'logout' %}">Log out</a>
-        </nav>
-        {% if user.is_staff %}
-        <a href="{% url banking_app:staff_home %}">Go to Staff view</a>
-        {% else %}
-        <h1>Welcome to PayLater Bank</h2>
-        <nav>
-            <a href="{% url 'login' %}">Log in</a>
-        </nav>
-        {% endif %}
+{% extends "banking_templates/base.html" %}
 
-        <hr />
+{% block content %}
 
-        <div>
-            <h3>Request loans</h3>
-            <a href="{% url 'login' %}">Click here to request a loan</a>
-        </div>
+<hr />
 
-    </body>
-</html>
+<div>
+    <h3>Request loans</h3>
+    <a href="{% url 'login' %}">Click here to request a loan</a>
+</div>
+
+{% endblock %}
