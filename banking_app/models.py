@@ -22,6 +22,7 @@ class Account(models.Model):
 
     @property
     def balance(self):
+<<<<<<< HEAD
         return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))
 
 
@@ -31,4 +32,7 @@ class Ledger(models.Model):
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.IntegerField(max_length=150)
 
+=======
+        return Ledger.object.filter(account_id=self).aggragate(Sum('amount'))
+>>>>>>> 1bad0a8 (whatever)
 
