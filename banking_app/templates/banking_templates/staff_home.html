@@ -18,6 +18,15 @@
    {% endif %}
    <hr />
 
+   <fieldset>
+      <legend>Create an account</legend>
+      <form action="">
+         <label for="AccountName">Account name</label>
+        <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
+        <button type="submit">Create an account</button>
+      </form>
+    </fieldset>
+    
 <fieldset>
 <legend>Create a user</legend>
    <form action="{% url 'banking_app:CreateAUser' %}" method="POST">
