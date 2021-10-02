@@ -3,10 +3,10 @@
 {% block content %}
 {% load static %}
 
-{% if user.is_authenticated %}
+{% if request.user.is_authenticated %}
 <h1>Welcome back {{ user }}</h1>
 <nav>
-    {% if user.is_staff %}
+    {% if request.user.is_staff %}
     <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
     {% else %}
     <a href="{% url 'banking_app:user_account' %}">My accounts</a>
@@ -19,9 +19,12 @@
     <a href="{% url 'login' %}">Log in</a>
 </nav>
 {% endif %}
+hello
 
 
 <hr />
+
+
 
 <div>
     <h3>Request loans</h3>

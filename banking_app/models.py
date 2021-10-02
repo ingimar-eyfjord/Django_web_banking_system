@@ -20,12 +20,12 @@ class Customer(models.Model):
 
     @property
     def change_rank(self, pk, ranking):
-   # {create code for changing rank}
+#    # {create code for changing rank}
        try:
            self.objects.filter(pk=ranking_choices).update(ranking_choices=ranking)
            return f'The rank has been updated'
-       except Exeption as e:
-           return f'There was an error {e}'
+       except:
+           return f'There was an error'
 
 class Account(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT)
