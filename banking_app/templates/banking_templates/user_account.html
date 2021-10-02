@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="https://classless.de/classless.css">
-   <title>PayLater Bank Staff page</title>
-</head>
-<body>
-   {% if user.is_authenticated %}
-   <h1>Welcome back {{ user }}</h1>
-   <nav>
-       <a href="{% url 'logout' %}">Log out</a>
-   </nav>
-   {% endif %}
-   {% if user.is_staff %}
-   <p>You are logged in as staff</p>
-   {% endif %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://classless.de/classless.css" />
+    <title>PayLater Bank My accounts</title>
+  </head>
+  <body>
+    {% if request.user.is_authenticated %}
+    <h1>Welcome back {{ user }}</h1>
+    <nav>
+      <a href="{% url 'logout' %}">Log out</a>
+    </nav>
+    <p>Here is an overview of your accounts</p>
+    {% endif %}
+    <hr />
 
-   <hr />
-
-
-</body>
+    <fieldset>
+      <legend>Create an account</legend>
+      <form action="">
+         <label for="AccountName">Account name</label>
+        <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
+        <button type="submit">Create an account</button>
+      </form>
+    </fieldset>
+  </body>
 </html>

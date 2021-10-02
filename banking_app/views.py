@@ -19,9 +19,7 @@ def user_account(request, pk):
     context = {
         'user' : "Ingimar"
             }
-    return render(request, 'banking_templates/accounts.html', context)
-
-
+    return render(request, 'banking_templates/user_account.html', context)
 
 @login_required
 def staff_home(request):

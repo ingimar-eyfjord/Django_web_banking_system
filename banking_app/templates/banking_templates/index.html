@@ -9,7 +9,7 @@
     {% if request.user.is_staff %}
     <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
     {% else %}
-    <a href="{% url 'banking_app:user_account' %}">My accounts</a>
+    <a href="{% url 'banking_app:my-accounts' request.user.pk %}">My accounts</a>
     {% endif %}
     <a href="{% url 'logout' %}">Log out</a>
 </nav>
