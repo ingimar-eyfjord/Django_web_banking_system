@@ -16,7 +16,6 @@ def index(request):
 
 @login_required
 def user_account(request, pk):
-    Account.
     context = {
         'user' : "Ingimar"
             }
