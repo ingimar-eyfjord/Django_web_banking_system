@@ -19,9 +19,13 @@ class Customer(models.Model):
         phone_number = models.CharField(max_length=20)
 
     @property
-    def change_rank(self):
+    def change_rank(self, pk, ranking):
    # {create code for changing rank}
-
+       try:
+           self.objects.filter(pk=ranking_choices).update(ranking_choices=ranking)
+           return f'The rank has been updated'
+       except Exeption as e:
+           return f'There was an error {e}'
 
 class Account(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT)
@@ -32,12 +36,10 @@ class Account(models.Model):
         return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))
 
     @property
-    def create(self):
-#        {create account create code here}
-
-    @property
     def get_transactions(self):
-#        {make code to get all transactions maybe limit by 50 or something}
+#   {make code to get all transactions maybe limit by 50 or something}
+#   Entry.objects.all()[:10:2] =  transactions OFFSET 5 LIMIT 5 (current, limit = 5)
+        return Ledger.object.filter(account_id=self)[:5]
 
 class Ledger(models.Model):
 
