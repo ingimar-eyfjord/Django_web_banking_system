@@ -30,16 +30,15 @@ class Customer(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - username: {self.user.username}"
 
+    # Use signals to create a customer everytime a user is added
+    @receiver(post_save, sender=User)
+    def create_customer(sender, instance, created, **kwargs):
+        if created:
+            Customer.objects.create(user=instance)
 
-# Use signals to create a customer everytime a user is added
-@receiver(post_save, sender=User)
-def create_customer(sender, instance, created, **kwargs):
-    if created:
-        Customer.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_customer(sender, instance, **kwargs):
-    instance.customer.save()
+    #@receiver(post_save, sender=User)
+    #def save_customer(sender, instance, **kwargs):
+     #   instance.customer.save()
 
 
 class Account(models.Model):

@@ -20,6 +20,8 @@
                 <th>Last name</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Phone number</th>
+                <th>Ranking</th>
                 <th>Account</th>
             </tr>
             {% for customer in customers  %}
@@ -28,6 +30,8 @@
                 <td>{{ customer.last_name }}</td>
                 <td>{{ customer }}</td>
                 <td>{{ customer.email }}</td>
+                <td>{{ customer.phone_number }}</td>
+                <td>{{ customer.ranking }}</td>
             </tr>
             {% endfor %}
         </table>

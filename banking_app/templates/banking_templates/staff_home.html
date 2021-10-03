@@ -11,7 +11,7 @@
    <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
    <nav>
        <a href="{% url 'logout' %}">Log out</a>
-       <a href="{% url 'banking_app:all_users' %}">View all users</a>
+       <a href="{% url 'banking_app:all_customers' %}">View all users</a>
    </nav>
    {% endif %}
    {% if request.user.is_staff %}
