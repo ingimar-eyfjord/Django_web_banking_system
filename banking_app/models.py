@@ -31,7 +31,7 @@ class Account(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT)
     is_loan = models.BooleanField(False)
     account_name = models.CharField(max_length=50)
-    
+
     @property
     def balance(self):
         return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))

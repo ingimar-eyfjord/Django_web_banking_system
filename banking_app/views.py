@@ -1,6 +1,6 @@
 from typing import ContextManager
 from django.shortcuts import render
-from .models import Customer, Account
+from .models import Customer, Account, Ledger
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -9,9 +9,8 @@ from datetime import date
 from datetime import datetime
 
 def index(request):
-    user = request.user.get_username()
+    user = request.user.username
     user_full_name = request.user.get_full_name()
-
     context = {
             'user_full_name': user_full_name
     }
