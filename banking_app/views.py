@@ -10,14 +10,14 @@ from datetime import datetime
 
 def index(request):
     context = {
-            'user' : "Ingimar"
-              }
+            'user' : request.user.username
+            }
     return render(request, 'banking_templates/index.html', context)
 
 @login_required
 def user_account(request, pk):
     context = {
-        'user' : "Ingimar"
+            'user' : request.user.username
             }
     return render(request, 'banking_templates/user_account.html', context)
 
