@@ -8,5 +8,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('my-accounts/<int:pk>/', views.user_account, name='my-accounts'),
     path('create_user/', views.create_user, name='create_user'),
-    path('staff_home.html', views.staff_home, name='staff_home'),
-    ]
+    path('staff_home/', views.staff_home, name='staff_home'),
+]
