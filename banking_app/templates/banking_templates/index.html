@@ -4,7 +4,7 @@
 {% load static %}
 
 {% if request.user.is_authenticated %}
-<h1>Welcome back {{ user }}</h1>
+<h1>Welcome back {{ user_full_name }}</h1>
 <nav>
     {% if request.user.is_staff %}
     <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
@@ -19,7 +19,10 @@
     <a href="{% url 'login' %}">Log in</a>
 </nav>
 {% endif %}
-hello
+
+{% if request.user.is_staff %}
+    <p>You are logged in as PayLater employee.</p>
+{% endif %}
 
 
 <hr />

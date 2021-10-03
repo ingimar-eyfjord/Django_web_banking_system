@@ -7,6 +7,6 @@ app_name = 'banking_app'
 urlpatterns = [
     path('', views.index, name='index'),
     path('my-accounts/<int:pk>/', views.user_account, name='my-accounts'),
-    path('CreateAUser/', views.CreateAUser, name='CreateAUser'),
+    path('create_user/', views.create_user, name='create_user'),
     path('staff_home.html', views.staff_home, name='staff_home'),
     ]
