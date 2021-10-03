@@ -9,9 +9,13 @@ from datetime import date
 from datetime import datetime
 
 def index(request):
+    user = request.user.get_username()
+    user_full_name = request.user.get_full_name()
+
     context = {
-            'user' : request.user.username
-            }
+            'user_full_name': user_full_name
+    }
+
     return render(request, 'banking_templates/index.html', context)
 
 @login_required
@@ -35,7 +39,7 @@ def staff_home(request):
             return render(request, 'banking_templates/index.html', context)
 
 @login_required
-def CreateAUser(request):
+def create_user(request):
     context = {}
     if request.user.is_staff:
         if request.method == "POST":

@@ -8,13 +8,13 @@
 </head>
 <body>
    {% if request.user.is_authenticated %}
-   <h1>Welcome back {{ user }}</h1>
+   <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
    <nav>
        <a href="{% url 'logout' %}">Log out</a>
    </nav>
    {% endif %}
    {% if request.user.is_staff %}
-   <p>You are logged in as staff</p>
+   <p>You are logged in as PayLater employee: {{ user }}</p>
    {% endif %}
    <hr />
 
@@ -26,10 +26,10 @@
         <button type="submit">Create an account</button>
       </form>
     </fieldset>
-    
+
 <fieldset>
 <legend>Create a user</legend>
-   <form action="{% url 'banking_app:CreateAUser' %}" method="POST">
+   <form action="{% url 'banking_app:create_user' %}" method="POST">
       {% csrf_token %}
       <label for="Username">User's username</label>
       <input type="text" name="username" id="Username" placeholder="Username">
