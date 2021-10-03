@@ -1,5 +1,5 @@
 from typing import ContextManager
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Customer, Account, Ledger
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -80,7 +80,22 @@ def create_user(request):
 def all_customers(request):
     all_users = User.objects.all()
     customers = all_users.filter(is_staff=False)
+    #obj = User.objects.firs()
+    #field_obj = User._meta.get_field('ranking')
+    #current_ranking = field_obj.value_from_object(all_users)
     context = {
             'customers': customers
+            #'current_ranking': current_ranking
             }
     return render(request, 'banking_templates/all_customers.html', context)
+
+
+@login_required
+def change_ranking(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    new_ranking = request.POST['ranking']
+    if "selected" in request.POST:
+        customer.ranking = new_ranking
+
+    customer.save()
+    return HttpResponseRedirect(reverse('banking_app:all_customers'))

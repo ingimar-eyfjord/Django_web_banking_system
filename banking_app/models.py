@@ -42,9 +42,10 @@ class Customer(models.Model):
 
 
 class Account(models.Model):
-    customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    user = models.ForeignKey(Customer, on_delete=models.PROTECT)
     is_loan = models.BooleanField(False)
-    account_name = models.CharField(max_length=50)
+    account_id = models.IntegerField()
+
 
     @property
     def balance(self):

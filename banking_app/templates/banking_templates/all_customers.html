@@ -31,7 +31,20 @@
                 <td>{{ customer }}</td>
                 <td>{{ customer.email }}</td>
                 <td>{{ customer.phone_number }}</td>
-                <td>{{ customer.ranking }}</td>
+                <td>
+                    <form action="{% url 'banking_app:change_ranking' customer.pk %}" method="POST">
+                        {% csrf_token %}
+                    <select name="ranking">
+                        <!--<option value="{{ customer.ranking.select }}" {% if customer.ranking.select %} selected {% endif %}>
+                        {{ customer.ranking }}
+                        </option>-->
+                        <option value="B" {% if 'B' in customer.ranking %} selected {% endif %}>Basic</option>
+                        <option value="S" {% if 'S' in customer.ranking %} selected {% endif %}>Silver</option>
+                        <option value="G" {% if 'G' in customer.ranking %} selected {% endif %}>Gold</option>
+                    </select>
+                    <button type="submit">Update</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>

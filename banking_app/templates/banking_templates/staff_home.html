@@ -29,6 +29,7 @@
     </fieldset>
 
 <fieldset>
+
 <legend>Create a user</legend>
    <form action="{% url 'banking_app:create_user' %}" method="POST">
       {% csrf_token %}
@@ -46,6 +47,7 @@
       <input type="password" name="password" id="password" placeholder="Write your password">
       <label for="confirm_password">Confirm Password</label>
       <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password">
+      <p>Status: <span>{{ message }}</span></p>
       <button type="submit">Submit user</button>
       <button type="reset">Clear fields</button>
    </form>
