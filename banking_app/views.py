@@ -10,9 +10,10 @@ from datetime import datetime
 
 def index(request):
     user = request.user.username
-    user_full_name = request.user.get_full_name()
+    #user_full_name = request.user.get_full_name()
+
     context = {
-            'user_full_name': user_full_name
+            'user': user
     }
 
     return render(request, 'banking_templates/index.html', context)
@@ -42,14 +43,20 @@ def create_user(request):
     context = {}
     if request.user.is_staff:
         if request.method == "POST":
+            # From create_user form
+            username = request.POST['username']
+            email = request.POST['email']
             password = request.POST['password']
             confirm_password = request.POST['confirm_password']
+
+            # Setting the following automatically for new user/customer
             is_active = True
-            last_login= datetime.now()
+            last_login = datetime.now()
             date_joined = date.today()
             is_staff = False
+
             if password == confirm_password:
-                if User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff, first_name=request.POST['First_name'], last_name=request.POST['Last_name']):
+                if User.objects.create_user(username, email, password, first_name=request.POST['first_name'], last_name=request.POST['last_name'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff):
                     context = {
                         "status": 200,
                         "message": "User has been successfully created"
@@ -68,3 +75,12 @@ def create_user(request):
         return render(request, 'registration/staff_home.html', context)
     else:
         return render(request, 'registration/index.html', context)
+
+@login_required
+def all_users(request):
+    all_users = User.objects.all()
+    users = all_users.filter(is_staff=False)
+    context = {
+            'users': users
+            }
+    return render(request, 'banking_templates/all_users.html', context)
