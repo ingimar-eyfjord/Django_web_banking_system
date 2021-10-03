@@ -1,6 +1,6 @@
 from typing import ContextManager
 from django.shortcuts import render
-from .models import Customer, Account
+from .models import Customer, Account, Ledger
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -75,3 +75,12 @@ def create_user(request):
         return render(request, 'registration/staff_home.html', context)
     else:
         return render(request, 'registration/index.html', context)
+
+@login_required
+def all_users(request):
+    all_users = User.objects.all()
+    users = all_users.filter(is_staff=False)
+    context = {
+            'users': users
+            }
+    return render(request, 'banking_templates/all_users.html', context)
