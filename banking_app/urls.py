@@ -9,6 +9,6 @@ urlpatterns = [
     path('my-accounts/<int:pk>/', views.user_account, name='my-accounts'),
     path('create_user/', views.create_user, name='create_user'),
     path('staff_home/', views.staff_home, name='staff_home'),
-    path('all_users/', views.all_users, name='all_users'),
+    path('all_customers/', views.all_customers, name='all_customers'),
     ]
 

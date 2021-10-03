@@ -77,10 +77,10 @@ def create_user(request):
         return render(request, 'registration/index.html', context)
 
 @login_required
-def all_users(request):
+def all_customers(request):
     all_users = User.objects.all()
-    users = all_users.filter(is_staff=False)
+    customers = all_users.filter(is_staff=False)
     context = {
-            'users': users
+            'customers': customers
             }
-    return render(request, 'banking_templates/all_users.html', context)
+    return render(request, 'banking_templates/all_customers.html', context)
