@@ -21,7 +21,7 @@ def index(request):
 @login_required
 def user_account(request, pk):
     context = {
-        'user' : "Ingimar"
+            'user' : request.user.username
             }
     return render(request, 'banking_templates/user_account.html', context)
 
