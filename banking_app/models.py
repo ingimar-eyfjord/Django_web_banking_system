@@ -59,6 +59,13 @@ class Account(models.Model):
     is_loan = models.BooleanField(False)
     account_id = models.IntegerField()
 
+    def open_account(user, is_loan, account_id):
+        user = user
+        account_id = account_id
+        is_loan = is_loan
+        s = Account(user=user, is_loan=is_loan, account_id=account_id)
+        s.save()
+
     @property
     def balance(self):
         return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))

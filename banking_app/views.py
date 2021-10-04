@@ -53,7 +53,6 @@ def create_user(request):
             email = request.POST['email']
             password = request.POST['password']
             confirm_password = request.POST['confirm_password']
-
             # Setting the following automatically for new user/customer
             is_active = True
             last_login = datetime.now()
@@ -106,8 +105,7 @@ def create_account(request):
         is_loan = False
     hexstr = secrets.token_hex(4)
     account_id = int(hexstr, 16)
-    b = Account(user=user, is_loan=is_loan, account_id=account_id)
-    b.save()
+    Account.open_account(user=user, is_loan=is_loan, account_id=account_id)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
 
 
