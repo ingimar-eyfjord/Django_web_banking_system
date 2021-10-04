@@ -1,6 +1,6 @@
 from typing import ContextManager
-from django.shortcuts import render
-from .models import Customer, Account
+from django.shortcuts import render, get_object_or_404
+from .models import Customer, Account, Ledger
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -9,15 +9,19 @@ from datetime import date
 from datetime import datetime
 
 def index(request):
+    user = request.user.username
+    #user_full_name = request.user.get_full_name()
+
     context = {
-            'user' : "Ingimar"
-              }
+            'user': user
+    }
+
     return render(request, 'banking_templates/index.html', context)
 
 @login_required
 def user_account(request, pk):
     context = {
-        'user' : "Ingimar"
+            'user' : request.user.username
             }
     return render(request, 'banking_templates/user_account.html', context)
 
@@ -35,18 +39,24 @@ def staff_home(request):
             return render(request, 'banking_templates/index.html', context)
 
 @login_required
-def CreateAUser(request):
+def create_user(request):
     context = {}
     if request.user.is_staff:
         if request.method == "POST":
+            # From create_user form
+            username = request.POST['username']
+            email = request.POST['email']
             password = request.POST['password']
             confirm_password = request.POST['confirm_password']
+
+            # Setting the following automatically for new user/customer
             is_active = True
-            last_login= datetime.now()
+            last_login = datetime.now()
             date_joined = date.today()
             is_staff = False
+
             if password == confirm_password:
-                if User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff, first_name=request.POST['First_name'], last_name=request.POST['Last_name']):
+                if User.objects.create_user(username, email, password, first_name=request.POST['first_name'], last_name=request.POST['last_name'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff):
                     context = {
                         "status": 200,
                         "message": "User has been successfully created"
@@ -65,3 +75,27 @@ def CreateAUser(request):
         return render(request, 'registration/staff_home.html', context)
     else:
         return render(request, 'registration/index.html', context)
+
+@login_required
+def all_customers(request):
+    all_users = User.objects.all()
+    customers = all_users.filter(is_staff=False)
+    #obj = User.objects.firs()
+    #field_obj = User._meta.get_field('ranking')
+    #current_ranking = field_obj.value_from_object(all_users)
+    context = {
+            'customers': customers
+            #'current_ranking': current_ranking
+            }
+    return render(request, 'banking_templates/all_customers.html', context)
+
+
+@login_required
+def change_ranking(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    new_ranking = request.POST['ranking']
+    if "selected" in request.POST:
+        customer.ranking = new_ranking
+
+    customer.save()
+    return HttpResponseRedirect(reverse('banking_app:all_customers'))

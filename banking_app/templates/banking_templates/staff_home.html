@@ -8,13 +8,14 @@
 </head>
 <body>
    {% if request.user.is_authenticated %}
-   <h1>Welcome back {{ user }}</h1>
+   <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
    <nav>
        <a href="{% url 'logout' %}">Log out</a>
+       <a href="{% url 'banking_app:all_customers' %}">View all users</a>
    </nav>
    {% endif %}
    {% if request.user.is_staff %}
-   <p>You are logged in as staff</p>
+   <p>You are logged in as PayLater employee: {{ user }}</p>
    {% endif %}
    <hr />
 
@@ -26,25 +27,27 @@
         <button type="submit">Create an account</button>
       </form>
     </fieldset>
-    
+
 <fieldset>
+
 <legend>Create a user</legend>
-   <form action="{% url 'banking_app:CreateAUser' %}" method="POST">
+   <form action="{% url 'banking_app:create_user' %}" method="POST">
       {% csrf_token %}
-      <label for="Username">User's username</label>
-      <input type="text" name="username" id="Username" placeholder="Username">
-      <label for="First_name">First name</label>
-      <input type="text" name="First_name" id="First_name" placeholder="First name">
-      <label for="Last_name">Last name</label>
-      <input type="text" name="Last_name" id="Last_name" placeholder="Last name">
-      <label for="Email">Email</label>
-      <input type="email" name="email" id="Email" placeholder="Email">
-      <label for="PhoneNumber">Phone number</label>
-      <input type="PhoneNumber" name="PhoneNumber" id="PhoneNumber" placeholder="PhoneNumber">
+      <label for="username">User's username</label>
+      <input type="text" name="username" id="username" placeholder="Choose a username">
+      <label for="first_name">First name</label>
+      <input type="text" name="first_name" id="first_name" placeholder="Your first name">
+      <label for="last_name">Last name</label>
+      <input type="text" name="last_name" id="last_name" placeholder="Your last name">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Write your email">
+      <label for="phone_number">Phone number</label>
+      <input type="tel" name="phone_number" id="phone_number" placeholder="Write your phone number">
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" placeholder="Password">
+      <input type="password" name="password" id="password" placeholder="Write your password">
       <label for="confirm_password">Confirm Password</label>
-      <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password">
+      <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password">
+      <p>Status: <span>{{ message }}</span></p>
       <button type="submit">Submit user</button>
       <button type="reset">Clear fields</button>
    </form>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://classless.de/classless.css">
+        <title>PayLater Bank Staff page</title>
+    </head>
+    <body>
+        <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
+        <nav>
+            <a href="{% url 'logout' %}">Log out</a>
+        </nav>
+        <hr />
+
+        <h3>All customers</h3>
+        <table>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone number</th>
+                <th>Ranking</th>
+                <th>Account</th>
+            </tr>
+            {% for customer in customers  %}
+            <tr class="user">
+                <td>{{ customer.first_name }}</td>
+                <td>{{ customer.last_name }}</td>
+                <td>{{ customer }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone_number }}</td>
+                <td>
+                    <form action="{% url 'banking_app:change_ranking' customer.pk %}" method="POST">
+                        {% csrf_token %}
+                    <select name="ranking">
+                        <!--<option value="{{ customer.ranking.select }}" {% if customer.ranking.select %} selected {% endif %}>
+                        {{ customer.ranking }}
+                        </option>-->
+                        <option value="B" {% if 'B' in customer.ranking %} selected {% endif %}>Basic</option>
+                        <option value="S" {% if 'S' in customer.ranking %} selected {% endif %}>Silver</option>
+                        <option value="G" {% if 'G' in customer.ranking %} selected {% endif %}>Gold</option>
+                    </select>
+                    <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
