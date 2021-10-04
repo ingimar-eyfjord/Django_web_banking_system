@@ -17,14 +17,25 @@ class Customer(models.Model):
             )
     phone_number = models.CharField(max_length=20)
 
-    @property
-    def change_rank(self, pk, ranking):
+    def Change_rank(pk, ranking):
         # TODO: add changing status
-       try:
-           self.objects.filter(pk=ranking_choices).update(ranking_choices=ranking)
-           return f'The rank has been updated'
-       except:
-           return f'There was an error'
+        try:
+            
+            Customer.objects.filter(pk=pk).update(ranking=ranking)
+            print('The rank has been updated')
+            return f'The rank has been updated'
+
+        except:
+            print('There was an error')
+            return f'There was an error'
+
+    def Change_phone(pk, phone_number):
+        # TODO: add changing status
+        try:
+            Customer.objects.filter(pk=pk).update(phone_number=phone_number)
+            return f'The rank has been updated'
+        except:
+            return f'There was an error'
 
     # Show customer's details in admin page
     def __str__(self):
@@ -33,6 +44,7 @@ class Customer(models.Model):
     # Use signals to create a customer everytime a user is added
     @receiver(post_save, sender=User)
     def create_customer(sender, instance, created, **kwargs):
+        print("-------Hey--------", instance.pk)
         if created:
             Customer.objects.create(user=instance)
 

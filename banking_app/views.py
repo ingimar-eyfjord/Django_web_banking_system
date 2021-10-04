@@ -54,13 +54,17 @@ def create_user(request):
             last_login = datetime.now()
             date_joined = date.today()
             is_staff = False
-
+            phone_number = request.POST['phone_number']
+            ranking = request.POST['Ranking']
             if password == confirm_password:
                 if User.objects.create_user(username, email, password, first_name=request.POST['first_name'], last_name=request.POST['last_name'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff):
                     context = {
                         "status": 200,
                         "message": "User has been successfully created"
                     }
+                    user_id = User.objects.last()
+                    Customer.Change_rank(user_id, ranking)
+                    Customer.Change_phone(user_id, phone_number)
                     return render(request, 'banking_templates/staff_home.html', context)
                 else:
                     context = {
@@ -72,30 +76,38 @@ def create_user(request):
                 "status": 400,
                 'error' : 'Passwords did not match - please try again'
                 }
-        return render(request, 'registration/staff_home.html', context)
+        return render(request, 'banking_templates/staff_home.html', context)
     else:
-        return render(request, 'registration/index.html', context)
+        return render(request, 'banking_templates/index.html', context)
 
 @login_required
 def all_customers(request):
-    all_users = User.objects.all()
-    customers = all_users.filter(is_staff=False)
-    #obj = User.objects.firs()
-    #field_obj = User._meta.get_field('ranking')
-    #current_ranking = field_obj.value_from_object(all_users)
+    all_users = User.objects.all().filter(is_staff=False)[:15]
+    all_customers = Customer.objects.all()[:15]
     context = {
-            'customers': customers
-            #'current_ranking': current_ranking
+            'all_users': all_users,
+            'all_customers': all_customers
             }
     return render(request, 'banking_templates/all_customers.html', context)
 
-
 @login_required
-def change_ranking(request, pk):
+def create_account(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     new_ranking = request.POST['ranking']
     if "selected" in request.POST:
         customer.ranking = new_ranking
 
     customer.save()
+    return HttpResponseRedirect(reverse('banking_app:sta'))
+
+
+@login_required
+def change_ranking(request, pk):
+    ranking = request.POST['Ranking']
+    print("-----------HEY ---", ranking, pk)
+    Customer.Change_rank(pk, ranking)
+    # customer = get_object_or_404(Customer, pk=pk)
+    # if "selected" in request.POST:
+    #     customer.ranking = new_ranking
+    # customer.save()
     return HttpResponseRedirect(reverse('banking_app:all_customers'))

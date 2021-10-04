@@ -10,43 +10,60 @@
         <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
         <nav>
             <a href="{% url 'logout' %}">Log out</a>
+            {% if request.user.is_staff %}
+            <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
+            {% endif %}
         </nav>
         <hr />
 
-        <h3>All customers</h3>
+        <h3>Customers</h3>
+
+        <label for="CustomerName2">Search for customer</label>
+        <input
+          type="text"
+          name="CustomerName"
+          placeholder="Customer name; customer phone number; customer id"
+          id="CustomerName2"
+        />
         <table>
+            <thead>
             <tr>
+                <th>Username</th>
                 <th>First name</th>
                 <th>Last name</th>
-                <th>Username</th>
                 <th>Email</th>
                 <th>Phone number</th>
                 <th>Ranking</th>
                 <th>Account</th>
+            </thead>
             </tr>
-            {% for customer in customers  %}
+            <tbody>
+            {% for user in all_users %}
+            {% for customer in all_customers %}
+            {% if customer.pk == user.pk %}
             <tr class="user">
-                <td>{{ customer.first_name }}</td>
-                <td>{{ customer.last_name }}</td>
-                <td>{{ customer }}</td>
-                <td>{{ customer.email }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
                 <td>{{ customer.phone_number }}</td>
+                
                 <td>
-                    <form action="{% url 'banking_app:change_ranking' customer.pk %}" method="POST">
+                    <form action="{% url 'banking_app:change_ranking' user.pk %}" method="POST">
                         {% csrf_token %}
-                    <select name="ranking">
-                        <!--<option value="{{ customer.ranking.select }}" {% if customer.ranking.select %} selected {% endif %}>
-                        {{ customer.ranking }}
-                        </option>-->
-                        <option value="B" {% if 'B' in customer.ranking %} selected {% endif %}>Basic</option>
-                        <option value="S" {% if 'S' in customer.ranking %} selected {% endif %}>Silver</option>
-                        <option value="G" {% if 'G' in customer.ranking %} selected {% endif %}>Gold</option>
-                    </select>
+                        <select name="Ranking" id="Ranking">
+                            <option {% if 'B' in customer.ranking %} selected {% endif %} value="Basic">⭕ Basic</option>
+                            <option {% if 'S' in customer.ranking %} selected {% endif %} value="Silver">⚪ Silver</option>
+                            <option {% if 'G' in customer.ranking %} selected {% endif %} value="Gold">🟡 GOLD</option>
+                        </select>
                     <button type="submit">Update</button>
                     </form>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
+            {% endfor %}
+            <tbody>
         </table>
     </body>
 </html>
