@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://classless.de/classless.css" />
+    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
     <title>PayLater Bank Staff page</title>
   </head>
   <body>
@@ -48,43 +49,48 @@
         </form>
       </fieldset>
 
-      <!-- <fieldset>
-      <legend>Switch customer ranking</legend>
-      <form action="">
-         <label for="CustomerName">Search for customer</label>
-         <input
-         type="text"
-         name="CustomerName"
-         placeholder="Customer name; customer phone number; customer id"
-         id="CustomerName"
-         />
-         <label for="Ranking">Choose a rank</label>
-         <select name="Ranking" id="Ranking">
-            <option value="B">⭕ Basic</option>
-            <option value="S">⚪ Silver</option>
-            <option value="G">🟡 GOLD</option>
-         </select>
-         <button type="submit">Confirm changes</button>
-      </form>
-   </fieldset> -->
+      <fieldset>
+        <legend>Create an account for a customer</legend>
+        <form method="POST" action="{% url 'banking_app:create_account' %}">
+          {% csrf_token %}
+          <label for="CustomerName2">Search for customer</label>
+          <input type="text" name="CustomerName" id="CustomerName2" />
+          <label for="pk">Customer name</label>
+          <select name="pk" id="pk" placeholder="Customer name; customer phone number; customer id">
+            {% for user in all_users %} {% for customer in all_customers %} {% if customer.pk == user.pk %}
+            <option value={{ user.pk }}>{{ user.username}}</option>
+            {% endif %} {% endfor %} {% endfor %}
+          </select>
+          <label for="AccountName">Account name</label>
+          <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
+
+
+          <input onchange="updateItSaLoan(this)" type="checkbox" id="IsLoan" name="loan" value="true">
+          <label  for="IsLoan"> User requests a loan</label><br><br>
+          <label for="loaned">Amount in the account</label>
+          <input placeholder="Amount 0.0$" onchange="updateNumber(this)" 
+          onkeydown="updateNumber(this)" type="number" id="loaned"  >
+          <button type="submit">Create the account</button>
+        </form>
+      </fieldset>
     </div>
-
-    <fieldset>
-      <legend>Create an account for a customer</legend>
-
-      <form action="{% url 'banking_app:create_account' request.user.pk %}">
-         {% csrf_token %}
-        <label for="CustomerName2">Search for customer</label>
-        <input
-          type="text"
-          name="CustomerName"
-          placeholder="Customer name; customer phone number; customer id"
-          id="CustomerName2"
-        />
-        <label for="AccountName">Account name</label>
-        <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
-        <button type="submit">Create an account</button>
-      </form>
-    </fieldset>
+    <script>
+   function updateNumber(element){
+      if(IsLoan.checked){
+         element.value = -Math.abs(element.value)
+      }
+      else{
+         loaned.value = Math.abs(loaned.value)
+      }
+   }
+   function updateItSaLoan(element){
+      if(element.checked){
+         loaned.value = -Math.abs(loaned.value)
+      }else{
+         loaned.value = Math.abs(loaned.value)
+      }
+   }
+   </script>
   </body>
 </html>
+

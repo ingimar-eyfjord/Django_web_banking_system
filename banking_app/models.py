@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 class Customer(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
     ranking_choices = [
@@ -20,7 +21,7 @@ class Customer(models.Model):
     def Change_rank(pk, ranking):
         # TODO: add changing status
         try:
-            
+
             Customer.objects.filter(pk=pk).update(ranking=ranking)
             print('The rank has been updated')
             return f'The rank has been updated'
@@ -58,7 +59,6 @@ class Account(models.Model):
     is_loan = models.BooleanField(False)
     account_id = models.IntegerField()
 
-
     @property
     def balance(self):
         return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))
@@ -68,6 +68,9 @@ class Account(models.Model):
 #   {make code to get all transactions maybe limit by 50 or something}
 #   Entry.objects.all()[:10:2] =  transactions OFFSET 5 LIMIT 5 (current, limit = 5)
         return Ledger.object.filter(account_id=self)[:5]
+
+    def __str__(self):
+        return self.headline
 
 class Ledger(models.Model):
 
