@@ -20,50 +20,59 @@
 
         <label for="CustomerName2">Search for customer</label>
         <input
-          type="text"
-          name="CustomerName"
-          placeholder="Customer name; customer phone number; customer id"
-          id="CustomerName2"
-        />
+                type="text"
+                name="CustomerName"
+                placeholder="Customer name; customer phone number; customer id"
+                id="CustomerName2"
+                />
         <table>
             <thead>
-            <tr>
-                <th>Username</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Email</th>
-                <th>Phone number</th>
-                <th>Ranking</th>
-                <th>Account</th>
+                <tr>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Email</th>
+                    <th>Phone number</th>
+                    <th>Ranking</th>
+                    <th>Account</th>
             </thead>
-            </tr>
-            <tbody>
-            {% for user in all_users %}
-            {% for customer in all_customers %}
-            {% if customer.pk == user.pk %}
-            <tr class="user">
-                <td>{{ user.username }}</td>
-                <td>{{ user.first_name }}</td>
-                <td>{{ user.last_name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ customer.phone_number }}</td>
+                </tr>
+                <tbody>
+                    {% for user in all_users %}
+                    {% for customer in all_customers %}
+                    {% if customer.pk == user.pk %}
 
-                <td>
-                    <form action="{% url 'banking_app:change_ranking' user.pk %}" method="POST">
-                        {% csrf_token %}
-                        <select name="ranking" id="ranking">
-                            <option {% if 'B' in customer.ranking %} selected {% endif %} value="Basic">⭕ Basic</option>
-                            <option {% if 'S' in customer.ranking %} selected {% endif %} value="Silver">⚪ Silver</option>
-                            <option {% if 'G' in customer.ranking %} selected {% endif %} value="Gold">🟡 GOLD</option>
-                        </select>
-                    <button type="submit">Update</button>
-                    </form>
-                </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
-            <tbody>
+                    <tr class="user">
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ customer.phone_number }}</td>
+                        <td>
+                            <form action="{% url 'banking_app:change_ranking' user.pk %}" method="POST">
+                                {% csrf_token %}
+                                <select name="ranking" id="ranking">
+                                    <option {% if 'B' in customer.ranking %} selected {% endif %} value="Basic">⭕ Basic</option>
+                                    <option {% if 'S' in customer.ranking %} selected {% endif %} value="Silver">⚪ Silver</option>
+                                    <option {% if 'G' in customer.ranking %} selected {% endif %} value="Gold">🟡 GOLD</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+
+                    {% for account in all_accounts %}
+
+                    {% if account.user == customer %}
+
+                        <td>{{ account.account_id }}</td>
+                        {% endif %}
+                        {% endfor %}
+
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    <tbody>
         </table>
-    </body>
+   </body>
 </html>

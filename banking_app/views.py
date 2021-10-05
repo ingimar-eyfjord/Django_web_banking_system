@@ -35,11 +35,13 @@ def staff_home(request):
         if request.user.is_staff:
             all_users = User.objects.all().filter(is_staff=False)[:15]
             all_customers = Customer.objects.all()[:15]
+
             context = {
             "status": 200,
             'all_users': all_users,
             'all_customers': all_customers
             }
+
             return render(request, 'banking_templates/staff_home.html', context)
         else:
             context = {
@@ -92,9 +94,18 @@ def create_user(request):
 def all_customers(request):
     all_users = User.objects.all().filter(is_staff=False)[:15]
     all_customers = Customer.objects.all()[:15]
+    all_accounts = Account.objects.all().select_related('user')
+
+    number_of_accounts = 5
+    account_list = []
+    for i in range(number_of_accounts):
+        account = Account()
+        account_list.append(account)
+
     context = {
             'all_users': all_users,
-            'all_customers': all_customers
+            'all_customers': all_customers,
+            'all_accounts': all_accounts
             }
     return render(request, 'banking_templates/all_customers.html', context)
 
@@ -116,11 +127,6 @@ def create_account(request):
 
 @login_required
 def change_ranking(request, pk):
-    ranking = request.POST['ranking']
-    print("-----------HEY ---", ranking, pk)
+    ranking = request.POST['Ranking']
     Customer.change_rank(pk, ranking)
-    # customer = get_object_or_404(Customer, pk=pk)
-    # if "selected" in request.POST:
-    #     customer.ranking = new_ranking
-    # customer.save()
     return HttpResponseRedirect(reverse('banking_app:all_customers'))

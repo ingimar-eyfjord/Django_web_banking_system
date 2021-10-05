@@ -34,7 +34,7 @@ class Customer(models.Model):
         # TODO: add changing status
         try:
             Customer.objects.filter(pk=pk).update(phone_number=phone_number)
-            return f'The rank has been updated'
+            return f'The phone number has been updated'
         except:
             return f'There was an error'
 
