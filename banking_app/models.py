@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from .utils import create_account_id
 
 class Customer(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
@@ -57,7 +57,12 @@ class Customer(models.Model):
 class Account(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
     is_loan = models.BooleanField(False)
-    account_id = models.IntegerField()
+    account_id = models.CharField(
+            max_length = 5,
+            editable=False,
+            unique=True,
+            default=create_account_id
+            )
 
     @property
     def open_account(user, is_loan, account_id):
