@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from .utils import create_account_id
 
 class Customer(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
@@ -56,15 +56,20 @@ class Customer(models.Model):
 
 class Account(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    is_loan = models.BooleanField()
-    account_id = models.CharField(max_length=255)
+    is_loan = models.BooleanField(False)
+    account_id = models.CharField(
+            max_length = 5,
+            editable=False,
+            unique=True,
+            default=create_account_id
+            )
 
     def open_account(user, is_loan, account_id):
         user = user
         account_id = account_id
         is_loan = is_loan
-        s = Account(user=user, is_loan=is_loan, account_id=account_id)
-        s.save()
+        new_account = Account(user=user, is_loan=is_loan, account_id=account_id)
+        new_account.save()
 
     @property
     def balance(self):
@@ -77,7 +82,7 @@ class Account(models.Model):
         return Ledger.object.filter(account_id=self)[:5]
 
     def __str__(self):
-        return self.headline
+        return f"{self.account_id} - {self.user}"
 
 class Ledger(models.Model):
 

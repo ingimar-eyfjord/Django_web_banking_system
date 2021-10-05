@@ -47,11 +47,11 @@
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ customer.phone_number }}</td>
-                
+
                 <td>
                     <form action="{% url 'banking_app:change_ranking' user.pk %}" method="POST">
                         {% csrf_token %}
-                        <select name="Ranking" id="Ranking">
+                        <select name="ranking" id="ranking">
                             <option {% if 'B' in customer.ranking %} selected {% endif %} value="Basic">⭕ Basic</option>
                             <option {% if 'S' in customer.ranking %} selected {% endif %} value="Silver">⚪ Silver</option>
                             <option {% if 'G' in customer.ranking %} selected {% endif %} value="Gold">🟡 GOLD</option>

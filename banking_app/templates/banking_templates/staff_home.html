@@ -37,8 +37,8 @@
           <input type="password" name="password" id="password" placeholder="Write your password" />
           <label for="confirm_password">Confirm Password</label>
           <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password" />
-          <label for="Ranking">Choose a rank</label>
-          <select name="Ranking" id="Ranking">
+          <label for="ranking">Choose a rank</label>
+          <select name="ranking" id="ranking">
             <option value="Basic">⭕ Basic</option>
             <option value="Silver">⚪ Silver</option>
             <option value="Gold">🟡 GOLD</option>
@@ -65,11 +65,19 @@
           <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
 
 
+<<<<<<< HEAD
           <input onchange="update_its_a_loan(this)" type="checkbox" id="IsLoan" name="loan" value="true">
           <label  for="IsLoan"> User requests a loan</label><br><br>
           <label for="loaned">Amount in the account</label>
           <input placeholder="Amount 0.0$" onchange="update_number(this)" 
           onkeydown="update_number(this)" type="number" id="loaned"  >
+=======
+          <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
+          <label  for="loan"> User requests a loan</label><br><br>
+          <label for="loaned">Amount in the account</label>
+          <input placeholder="Amount 0.0$" onchange="updateNumber(this)"
+          onkeydown="updateNumber(this)" type="number" id="loaned"  >
+>>>>>>> d028357ba0a6684c99a982de28679c74e0188cf5
           <button type="submit">Create the account</button>
         </form>
       </fieldset>
