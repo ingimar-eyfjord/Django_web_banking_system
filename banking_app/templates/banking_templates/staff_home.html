@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://classless.de/classless.css" />
-    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
-    <title>PayLater Bank Staff page</title>
-  </head>
-  <body>
-    {% if request.user.is_authenticated %}
-    <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
-    <nav>
-      <a href="{% url 'logout' %}">Log out</a>
-      <a href="{% url 'banking_app:all_customers' %}">View all users</a>
-    </nav>
-    {% endif %} {% if request.user.is_staff %}
-    <p>You are logged in as PayLater employee: {{ user }}</p>
-    {% endif %}
-    <hr />
-    <div class="row">
-      <fieldset>
-        <legend>Create a Customer</legend>
-        <form action="{% url 'banking_app:create_user' %}" method="POST">
-          {% csrf_token %}
-          <label for="username">User's username</label>
-          <input type="text" name="username" id="username" placeholder="Choose a username" />
-          <label for="first_name">First name</label>
-          <input type="text" name="first_name" id="first_name" placeholder="Your first name" />
-          <label for="last_name">Last name</label>
-          <input type="text" name="last_name" id="last_name" placeholder="Your last name" />
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" placeholder="Write your email" />
-          <label for="phone_number">Phone number</label>
-          <input type="tel" name="phone_number" id="phone_number" placeholder="Write your phone number" />
-          <label for="password">Password</label>
-          <input type="password" name="password" id="password" placeholder="Write your password" />
-          <label for="confirm_password">Confirm Password</label>
-          <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password" />
-          <label for="ranking">Choose a rank</label>
-          <select name="ranking" id="ranking">
-            <option value="Basic">⭕ Basic</option>
-            <option value="Silver">⚪ Silver</option>
-            <option value="Gold">🟡 GOLD</option>
-          </select>
-          <p>Status: <span>{{ message }}</span></p>
-          <button type="submit">Submit user</button>
-          <button type="reset">Clear fields</button>
-        </form>
-      </fieldset>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://classless.de/classless.css" />
+        <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+        <title>PayLater Bank Staff page</title>
+    </head>
+    <body>
+        {% if request.user.is_authenticated %}
+        <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
+        <nav>
+            <a href="{% url 'logout' %}">Log out</a>
+            <a href="{% url 'banking_app:all_customers' %}">View all users</a>
+        </nav>
+        {% endif %} {% if request.user.is_staff %}
+        <p>You are logged in as PayLater employee: {{ user }}</p>
+        {% endif %}
+        <hr />
+        <div class="row">
+            <fieldset>
+                <legend>Create a Customer</legend>
+                <form action="{% url 'banking_app:create_user' %}" method="POST">
+                    {% csrf_token %}
+                    <label for="username">User's username</label>
+                    <input type="text" name="username" id="username" placeholder="Choose a username" />
+                    <label for="first_name">First name</label>
+                    <input type="text" name="first_name" id="first_name" placeholder="Your first name" />
+                    <label for="last_name">Last name</label>
+                    <input type="text" name="last_name" id="last_name" placeholder="Your last name" />
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Write your email" />
+                    <label for="phone_number">Phone number</label>
+                    <input type="tel" name="phone_number" id="phone_number" placeholder="Write your phone number" />
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Write your password" />
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password" />
+                    <label for="ranking">Choose a rank</label>
+                    <select name="ranking" id="ranking">
+                        <option value="Basic">⭕ Basic</option>
+                        <option value="Silver">⚪ Silver</option>
+                        <option value="Gold">🟡 GOLD</option>
+                    </select>
+                    <p>Status: <span>{{ message }}</span></p>
+                    <button type="submit">Submit user</button>
+                    <button type="reset">Clear fields</button>
+                </form>
+            </fieldset>
 
-      <fieldset>
-        <legend>Create an account for a customer</legend>
-        <form method="POST" action="{% url 'banking_app:create_account' %}">
-          {% csrf_token %}
-          <label for="CustomerName2">Search for customer</label>
-          <input type="text" name="CustomerName" id="CustomerName2" />
-          <label for="pk">Customer name</label>
-          <select name="pk" id="pk" placeholder="Customer name; customer phone number; customer id">
-            {% for user in all_users %} {% for customer in all_customers %} {% if customer.pk == user.pk %}
-            <option value={{ user.pk }}>{{ user.username}}</option>
-            {% endif %} {% endfor %} {% endfor %}
-          </select>
-          <label for="AccountName">Account name</label>
-          <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
+            <fieldset>
+                <legend>Create an account for a customer</legend>
+                <form method="POST" action="{% url 'banking_app:create_account' %}">
+                    {% csrf_token %}
+                    <label for="CustomerName2">Search for customer</label>
+                    <input type="text" name="CustomerName" id="CustomerName2" />
+                    <label for="pk">Customer name</label>
+                    <select name="pk" id="pk" placeholder="Customer name; customer phone number; customer id">
+                        {% for user in all_users %} {% for customer in all_customers %} {% if customer.pk == user.pk %}
+                        <option value={{ user.pk }}>{{ user.username }}</option>
+                        {% endif %} {% endfor %} {% endfor %}
+                    </select>
+                    <label for="AccountName">Account name</label>
+                    <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
 
 
-          <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
-          <label  for="loan"> User requests a loan</label><br><br>
-          <label for="loaned">Amount in the account</label>
-          <input placeholder="Amount 0.0$" onchange="updateNumber(this)"
-          onkeydown="updateNumber(this)" type="number" id="loaned"  >
-          <button type="submit">Create the account</button>
-        </form>
-      </fieldset>
-    </div>
-    <script>
-   function updateNumber(element){
-      if(IsLoan.checked){
-         element.value = -Math.abs(element.value)
-      }
-      else{
-         loaned.value = Math.abs(loaned.value)
-      }
-   }
-   function updateItSaLoan(element){
-      if(element.checked){
-         loaned.value = -Math.abs(loaned.value)
-      }else{
-         loaned.value = Math.abs(loaned.value)
-      }
-   }
-   </script>
-  </body>
+                    <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
+                    <label for="loan"> User requests a loan</label><br><br>
+                    <label for="loaned">Amount in the account</label>
+                    <input placeholder="Amount 0.0$" onchange="updateNumber(this)"
+                                                     onkeydown="updateNumber(this)" type="number" id="loaned"  >
+                                                     <button type="submit">Create the account</button>
+                </form>
+            </fieldset>
+        </div>
+        <script>
+            function updateNumber(element){
+                            if(IsLoan.checked){
+                                            element.value = -Math.abs(element.value)
+                                        }
+                            else{
+                                            loaned.value = Math.abs(loaned.value)
+                                        }
+                        }
+            function updateItSaLoan(element){
+                            if(element.checked){
+                                            loaned.value = -Math.abs(loaned.value)
+                                        }else{
+                                                        loaned.value = Math.abs(loaned.value)
+                                                    }
+                        }
+        </script>
+    </body>
 </html>
