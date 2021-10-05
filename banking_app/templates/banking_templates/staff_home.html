@@ -65,25 +65,17 @@
           <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
 
 
-<<<<<<< HEAD
-          <input onchange="update_its_a_loan(this)" type="checkbox" id="IsLoan" name="loan" value="true">
-          <label  for="IsLoan"> User requests a loan</label><br><br>
-          <label for="loaned">Amount in the account</label>
-          <input placeholder="Amount 0.0$" onchange="update_number(this)" 
-          onkeydown="update_number(this)" type="number" id="loaned"  >
-=======
           <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
           <label  for="loan"> User requests a loan</label><br><br>
           <label for="loaned">Amount in the account</label>
           <input placeholder="Amount 0.0$" onchange="updateNumber(this)"
           onkeydown="updateNumber(this)" type="number" id="loaned"  >
->>>>>>> d028357ba0a6684c99a982de28679c74e0188cf5
           <button type="submit">Create the account</button>
         </form>
       </fieldset>
     </div>
     <script>
-   function update_number(element){
+   function updateNumber(element){
       if(IsLoan.checked){
          element.value = -Math.abs(element.value)
       }
@@ -91,7 +83,7 @@
          loaned.value = Math.abs(loaned.value)
       }
    }
-   function update_its_a_loan(element){
+   function updateItSaLoan(element){
       if(element.checked){
          loaned.value = -Math.abs(loaned.value)
       }else{
@@ -101,4 +93,3 @@
    </script>
   </body>
 </html>
-
