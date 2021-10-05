@@ -61,11 +61,11 @@ class Account(models.Model):
 
     @property
     def open_account(user, is_loan, account_id):
+        new_account = Account()
         user = user
         account_id = account_id
         is_loan = is_loan
-        s = Account(user=user, is_loan=is_loan, account_id=account_id)
-        s.save()
+        new_account.save()
 
     @property
     def balance(self):
@@ -78,7 +78,7 @@ class Account(models.Model):
         return Ledger.object.filter(account_id=self)[:5]
 
     def __str__(self):
-        return self.headline
+        return f"{self.account_id} - {self.user}"
 
 class Ledger(models.Model):
 
