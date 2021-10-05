@@ -2,6 +2,7 @@
 *.pot
 *.pyc
 __pycache__
+__pycache__/
 *.swp
 .DS_Store
 db.sqlite3
