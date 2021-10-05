@@ -59,7 +59,7 @@ def create_user(request):
             date_joined = date.today()
             is_staff = False
             phone_number = request.POST['phone_number']
-            ranking = request.POST['Ranking']
+            ranking = request.POST['ranking']
         if password == confirm_password:
                 if User.objects.create_user(username, email, password, first_name=request.POST['first_name'], last_name=request.POST['last_name'], is_active=is_active, last_login=last_login, date_joined=date_joined, is_staff=is_staff):
                     context = {
