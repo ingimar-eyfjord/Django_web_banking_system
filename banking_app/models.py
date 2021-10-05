@@ -18,7 +18,7 @@ class Customer(models.Model):
             )
     phone_number = models.CharField(max_length=20)
 
-    def Change_rank(pk, ranking):
+    def change_rank(pk, ranking):
         # TODO: add changing status
         try:
 
@@ -30,11 +30,11 @@ class Customer(models.Model):
             print('There was an error')
             return f'There was an error'
 
-    def Change_phone(pk, phone_number):
+    def change_phone(pk, phone_number):
         # TODO: add changing status
         try:
             Customer.objects.filter(pk=pk).update(phone_number=phone_number)
-            return f'The rank has been updated'
+            return f'The phone number has been updated'
         except:
             return f'There was an error'
 
@@ -56,8 +56,8 @@ class Customer(models.Model):
 
 class Account(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    is_loan = models.BooleanField(False)
-    account_id = models.IntegerField()
+    is_loan = models.BooleanField()
+    account_id = models.CharField(max_length=255)
 
     def open_account(user, is_loan, account_id):
         user = user

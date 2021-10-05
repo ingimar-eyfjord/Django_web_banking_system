@@ -67,8 +67,8 @@ def create_user(request):
                         "message": "User has been successfully created"
                     }
                     user_id = User.objects.last()
-                    Customer.Change_rank(user_id, ranking)
-                    Customer.Change_phone(user_id, phone_number)
+                    Customer.change_rank(user_id, ranking)
+                    Customer.change_phone(user_id, phone_number)
                     return render(request, 'banking_templates/staff_home.html', context)
                 else:
                     context = {
@@ -112,10 +112,5 @@ def create_account(request):
 @login_required
 def change_ranking(request, pk):
     ranking = request.POST['Ranking']
-    print("-----------HEY ---", ranking, pk)
-    Customer.Change_rank(pk, ranking)
-    # customer = get_object_or_404(Customer, pk=pk)
-    # if "selected" in request.POST:
-    #     customer.ranking = new_ranking
-    # customer.save()
+    Customer.change_rank(pk, ranking)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
