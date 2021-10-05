@@ -114,7 +114,7 @@ def create_account(request):
 def change_ranking(request, pk):
     ranking = request.POST['ranking']
     print("-----------HEY ---", ranking, pk)
-    Customer.Change_rank(pk, ranking)
+    Customer.change_rank(pk, ranking)
     # customer = get_object_or_404(Customer, pk=pk)
     # if "selected" in request.POST:
     #     customer.ranking = new_ranking
