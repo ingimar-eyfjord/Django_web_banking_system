@@ -21,8 +21,12 @@ def index(request):
 
 @login_required
 def user_account(request, pk):
+    user_accounts = Account.objects.all()
+    user_ledger = Ledger.objects.all()
     context = {
-            'user' : request.user.username
+            'user' : request.user.username,
+            'user_accounts': user_accounts,
+            'user_ledger': user_ledger,
             }
     return render(request, 'banking_templates/user_account.html', context)
 
