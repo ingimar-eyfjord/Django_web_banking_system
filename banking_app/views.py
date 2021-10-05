@@ -8,7 +8,7 @@ from django.urls import reverse
 from datetime import date
 from datetime import datetime
 import secrets
-
+from .utils import create_account_id
 
 
 def index(request):
@@ -104,7 +104,8 @@ def create_account(request):
     else:
         is_loan = False
     hexstr = secrets.token_hex(4)
-    account_id = int(hexstr, 16)
+    #account_id = int(hexstr, 16)
+    account_id = create_account_id()
     Account.open_account(user=user, is_loan=is_loan, account_id=account_id)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
 

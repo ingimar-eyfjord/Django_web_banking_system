@@ -64,12 +64,11 @@ class Account(models.Model):
             default=create_account_id
             )
 
-    @property
     def open_account(user, is_loan, account_id):
-        new_account = Account()
         user = user
         account_id = account_id
         is_loan = is_loan
+        new_account = Account(user=user, is_loan=is_loan, account_id=account_id)
         new_account.save()
 
     @property
