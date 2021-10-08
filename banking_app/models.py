@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from .utils import create_account_id, create_transaction_id, return_transaction
 from django.shortcuts import get_object_or_404
 
-
 class Customer(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
     ranking_choices = [
@@ -56,9 +55,6 @@ class Customer(models.Model):
     #@receiver(post_save, sender=User)
     #def save_customer(sender, instance, **kwargs):
      #   instance.customer.save()
-    
-
-
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
@@ -103,25 +99,17 @@ class Account(models.Model):
                     if float(who['ledger_amount']) < 0:
                         is_from = {'from': who['account_id']}
                         direction.append(is_from)
-
                 if who['account_id'] == self:
                     if float(who['ledger_amount']) < 0:
                         is_from = {'from': self}
                         direction.append(is_from)
-
                 if who['account_id'] == self:
                     if float(who['ledger_amount']) > 0:
                         is_to = {'to': self}
                         direction.append(is_to)
-                
-                        # is_from = {'from': who['account_id']}
-                        # direction.append(is_from)
 
-                        # is_to = {'to': who['account_id']}
             transactions.append(from_transaction)
         return [transactions, direction]
-
-        
 
     def __str__(self):
         return f"{self.account_id}" ### Changed this to only get the Account id because of the create loan / transactions
@@ -139,19 +127,18 @@ class Ledger(models.Model):
     def create_transaction(PassedAmount, account_id, trans_id):
         transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id)
         transaction.save()
-        
+
     def create_loan_transaction(debit_acc_id, credit_acc_id, amount):
         print(debit_acc_id, credit_acc_id)
         CreditToo = Account.objects.get(account_id=credit_acc_id)
         DebitFrom = Account.objects.get(account_id=debit_acc_id)
         amount_credit = float(amount)
         amount_debit = -float(amount)
-        transaction_id = create_transaction_id()
-        print("amounts herere", amount_credit, amount_debit)
-        Ledger.create_transaction(amount_credit, CreditToo, transaction_id)
-        Ledger.create_transaction(amount_debit, DebitFrom, transaction_id)
+        trans_id = create_transaction_id()
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id)
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id)
         
     def __str__(self):
-        return f"{self.transaction_id}"
+        return f"{self.transaction_id} - {self.transaction_date}"
 
    

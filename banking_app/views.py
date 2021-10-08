@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from datetime import date
 from datetime import datetime
+from .utils import create_transaction_id
 import secrets
 from pprint import pprint
 
@@ -141,3 +142,24 @@ def view_transactions(request, pk):
     context['direction'] = get_context[1]
 
     return render(request, 'banking_templates/view_transactions.html', context)
+
+@login_required
+def make_transaction(request, pk):
+    DebitFrom = Account.objects.get(account_id=pk)
+    if request.method == "POST":
+        CreditToo = Account.objects.get(account_id=request.POST['account_id'])
+        amount_credit = float(request.POST['Amount'])
+        amount_debit = -float(request.POST['Amount'])
+        trans_id = create_transaction_id()
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id)
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id)
+        context = {}
+        return HttpResponseRedirect(reverse('banking_app:index'))
+    
+    
+    context = {
+        'account': int(pk),
+        'accounts': Account.objects.exclude(pk=DebitFrom.pk),
+        'balance': float(Account.balance(DebitFrom))
+    }
+    return render(request, 'banking_templates/make_transaction.html', context)

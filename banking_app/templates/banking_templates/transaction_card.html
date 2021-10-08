@@ -1,6 +1,6 @@
 <style>
 :root {
-  --width: 60vw;
+  --width: 50vw;
 }
 .card .row{
     margin:0;
@@ -26,50 +26,38 @@ margin: 5px 0 0 0;
         <div class="col">
             <h4>Account name</h4>
         </div>
-
-        <div class="col">
-            <h4>Account number</h4>
-        </div>
-
         <div class="col">
         <h4>Amount</h4>
         </div>
-      
         <div class="col">
         <h4>Transaction number</h4>
         </div>
-
         <div class="col">
             <h4>Transaction date</h4>
         </div>
-
     </div>
     <div class="row">
-
         {% if request.user.is_staff == False %}
         <div class="col">
-            <p>{{direction}}</p>
+             <!-- still trying to figure out how to do this "account to and from"-->
+            {% if transaction.ledger_amount <= 0 %}
+            <p>From: {{d.to}}</p>
+            {% else %}
+            <p>From: {{d.from}}</p>
+
+            {% endif %}
+           
         </div>
         {% else %}
         <div class="col">
             <p>Account name</p>
         </div>
         {% endif %}
-
-       
-
         {% if request.user.is_staff %}
         <div class="col">
             <p>{{transaction.account_id}}</p>
         </div>
         {% endif %}
-
-        {% if request.user.is_staff == False %}
-        <div class="col">
-            <p>{{transaction.account_id}}</p>
-        </div>
-        {% endif %}
-        
         <div class="col">
             {% if transaction.ledger_amount <= 0 %}
             <h4 style="color: red;">{{ transaction.ledger_amount }}</h4>
