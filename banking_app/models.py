@@ -5,7 +5,8 @@ from django.db.models.fields import PositiveIntegerRelDbTypeMixin
 from django.db.models.query_utils import select_related_descend
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .utils import create_account_id, create_transaction_id
+from .utils import create_account_id, create_transaction_id, return_transaction
+from django.shortcuts import get_object_or_404
 
 
 class Customer(models.Model):
@@ -88,21 +89,21 @@ class Account(models.Model):
         for x in legderObject:
             balance = balance + x.amount
         return balance
-       
+
     def get_transactions(self):
-        legderObject = Ledger.objects.filter(transaction_id=self)
+        legder = Ledger.objects.all().filter(account=self)
         transactions = []
-        for x in legderObject:
-            transaction = {
-            'account_id': x.account_id,
-            'ledger_amount': x.amount,
-            'transaction_id': x.transaction_id,
-            'transaction_date': x.transaction_date,
-            }
-            transactions.append(transaction)
-        print()
+        for x in legder:
+            from_transaction = Ledger.objects.all().filter(transaction_id=x.transaction_id)
+            from_transaction = return_transaction(from_transaction)
+            transactions.append(from_transaction)
+
+           
+            print(transactions)
+
         return transactions
 
+        
 
     def __str__(self):
         return f"{self.account_id}" ### Changed this to only get the Account id because of the create loan / transactions
@@ -134,3 +135,5 @@ class Ledger(models.Model):
         
     def __str__(self):
         return f"{self.transaction_id}"
+
+   

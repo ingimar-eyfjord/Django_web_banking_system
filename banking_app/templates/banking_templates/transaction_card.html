@@ -1,15 +1,61 @@
+<style>
+:root {
+  --width: 60vw;
+}
+.card .row{
+    margin:0;
+}
+.card .row .col h4{
+margin: 0;
+}
+</style>
+
 <div class="card">
     <div class="row">
         <div class="col">
             <h4>Account name</h4>
         </div>
+
         <div class="col">
             <h4>Account number</h4>
         </div>
+
         <div class="col">
-        <h4>Balance</h4>
+        <h4>Amount</h4>
         </div>
+
+        <div class="col">
+        <h4>Transaction number</h4>
         </div>
+
+        <div class="col">
+            <h4>Transaction date</h4>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Account name</p>
+        </div>
+
+        <div class="col">
+            <p> {{ transaction.account_id }} </p>
+        </div>
+
+        <div class="col">
+        <p> {{ transaction.ledger_amount }} </p>
+        </div>
+        <div class="col">
+        <p> {{transaction.transaction_id}} </p>
+        </div>
+        <div class="col">
+        <p> {{transaction.transaction_date}} </p>
+        </div>
+    </div>
+</div>
+
+<!-- 
+
     <hr>
     <div class="row">
         <div class="col">
@@ -41,4 +87,4 @@
             {% endif %}
         </div>
     </div>
-   </div>
+   </div> -->

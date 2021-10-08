@@ -22,8 +22,8 @@ def user_account(request, pk):
     user_accounts = Account.objects.filter(user=pk)
     #this for loop finds and appends balance on the user account 
     for x in user_accounts:
-        account_balance = Account.balance(x)
-        x.balance = account_balance
+        print(x)
+        x.balance  = Account.balance(x)
     context = {
             'user' : request.user.username,
             'user_accounts': user_accounts,
@@ -133,7 +133,12 @@ def change_ranking(request, pk):
 
 @login_required
 def view_transactions(request, pk):
-    context = {
-        
-    }
+    user_account = Account.objects.get(account_id=pk)
+    #this for loop finds and appends balance on the user account 
+    context = {'user_account': user_account, "balance": ""}
+    context['balance']  = str(Account.balance(user_account))
+    context['transactions']  = Account.get_transactions(user_account)
+    context['account'] = user_account
+
+
     return render(request, 'banking_templates/view_transactions.html', context)
