@@ -50,7 +50,6 @@ class Customer(models.Model):
     # Use signals to create a customer everytime a user is added
     @receiver(post_save, sender=User)
     def create_customer(sender, instance, created, **kwargs):
-        print("-------Hey--------", instance.pk)
         if created:
             Customer.objects.create(user=instance)
 
@@ -61,13 +60,14 @@ class Customer(models.Model):
 
 
 class Account(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
     is_loan = models.BooleanField(False)
     account_id = models.CharField(
             max_length = 5,
             editable=False,
             unique=True,
-            default=create_account_id
+            default=create_account_id,
             )
 
     def open_account(user, is_loan, Amount):
@@ -93,15 +93,33 @@ class Account(models.Model):
     def get_transactions(self):
         legder = Ledger.objects.all().filter(account=self)
         transactions = []
+        direction = []
         for x in legder:
             from_transaction = Ledger.objects.all().filter(transaction_id=x.transaction_id)
             from_transaction = return_transaction(from_transaction)
+            #this loop will tell us who is transfering and who is receiving money
+            for who in from_transaction:
+                if who['account_id'] != self:
+                    if float(who['ledger_amount']) < 0:
+                        is_from = {'from': who['account_id']}
+                        direction.append(is_from)
+
+                if who['account_id'] == self:
+                    if float(who['ledger_amount']) < 0:
+                        is_from = {'from': self}
+                        direction.append(is_from)
+
+                if who['account_id'] == self:
+                    if float(who['ledger_amount']) > 0:
+                        is_to = {'to': self}
+                        direction.append(is_to)
+                
+                        # is_from = {'from': who['account_id']}
+                        # direction.append(is_from)
+
+                        # is_to = {'to': who['account_id']}
             transactions.append(from_transaction)
-
-           
-            print(transactions)
-
-        return transactions
+        return [transactions, direction]
 
         
 

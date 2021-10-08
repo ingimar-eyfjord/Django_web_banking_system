@@ -2,13 +2,38 @@
 {% block content %}
 {% load static %}
 <hr>
+<h5>You are now viewing account number: {{account}}</h5>
+<hr>
+<div class="card">
+        <div class="row">
+            <div class="col">
+                <h4>Account balance</h4>
+                {% if balance <= 0 %}
+                <h4 style="color: red;">{{balance}}</h4>
+                {% endif %}
+                {% if balance >= 0 %}
+                <h4 style="color: green;">{{balance}}</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        <!-- Staff sees more of the transaction for this account -->
         <h3>Transactions</h3>
         {% for t in transactions %}
         {% for transaction in t %}
+        <!--  -->
+        {% if request.user.is_staff %}
         {% include "banking_templates/transaction_card.html" %} 
+        {% endif %}
+        {% if request.user.is_staff == False and transaction.account_id == account %}
+        {% include "banking_templates/transaction_card.html" %} 
+        {% endif %}
+       
         {% endfor %}
         {% endfor %}
 
+        
 {% endblock %}
 
 hello

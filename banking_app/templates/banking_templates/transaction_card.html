@@ -5,12 +5,23 @@
 .card .row{
     margin:0;
 }
-.card .row .col h4{
-margin: 0;
+.card .row .col h4, p{
+margin: 5px 0 0 0;
 }
 </style>
+<div style="display:flex; width:100%">
+{% if request.user.is_staff %}
+{% if transaction.account_id == account %}
+{% if transaction.ledger_amount <= 0 %}
+<span style="font-size: 4rem;">⮤</span>
+{% else %}
+<span style="font-size: 4rem; margin:0">↱</span>
+{% endif %}
+{% endif %}
+{% endif %}
 
-<div class="card">
+
+<div style="width:100%" class="card">
     <div class="row">
         <div class="col">
             <h4>Account name</h4>
@@ -23,7 +34,7 @@ margin: 0;
         <div class="col">
         <h4>Amount</h4>
         </div>
-
+      
         <div class="col">
         <h4>Transaction number</h4>
         </div>
@@ -34,16 +45,37 @@ margin: 0;
 
     </div>
     <div class="row">
+
+        {% if request.user.is_staff == False %}
+        <div class="col">
+            <p>{{direction}}</p>
+        </div>
+        {% else %}
         <div class="col">
             <p>Account name</p>
         </div>
+        {% endif %}
 
+       
+
+        {% if request.user.is_staff %}
         <div class="col">
-            <p> {{ transaction.account_id }} </p>
+            <p>{{transaction.account_id}}</p>
         </div>
+        {% endif %}
 
+        {% if request.user.is_staff == False %}
         <div class="col">
-        <p> {{ transaction.ledger_amount }} </p>
+            <p>{{transaction.account_id}}</p>
+        </div>
+        {% endif %}
+        
+        <div class="col">
+            {% if transaction.ledger_amount <= 0 %}
+            <h4 style="color: red;">{{ transaction.ledger_amount }}</h4>
+            {% else %}
+            <h4 style="color: green;">{{ transaction.ledger_amount }}</p>
+            {% endif %}
         </div>
         <div class="col">
         <p> {{transaction.transaction_id}} </p>
@@ -53,38 +85,4 @@ margin: 0;
         </div>
     </div>
 </div>
-
-<!-- 
-
-    <hr>
-    <div class="row">
-        <div class="col">
-            <p>We should make it?</p>
-        </div>
-    <div class="col">
-    <p>{{ account.account_id }}</p>
-    </div>
-    <div class="col">
-    <p>{{ account.balance }}</p>
-    </div>
-    </div>
-    <div class="row">
-        {% if account.is_loan == True %}
-        <div class="col">
-        <a>Manage loan</a>
-    </div>
-        {% else %}
-        <div class="col">
-            <a>Make a transaction</a>
-        </div>
-        {% endif %}
-        <div class="col">
-            <a href="{% url 'banking_app:view_transactions' account.account_id  %}">View transactions</a>
-        </div>
-        <div class="col">
-            {% if account.is_loan == False %}
-            <a>Take out loan</a>
-            {% endif %}
-        </div>
-    </div>
-   </div> -->
+</div>

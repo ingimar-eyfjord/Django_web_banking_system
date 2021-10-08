@@ -99,7 +99,6 @@ def all_customers(request):
     for i in range(number_of_accounts):
         account = Account()
         account_list.append(account)
-
     context = {
             'all_users': all_users,
             'all_customers': all_customers,
@@ -113,7 +112,6 @@ def create_account(request):
     user = get_object_or_404(Customer, pk=pk)
     is_loan = request.POST['loan']
     Amount = request.POST['Amount']
-
     if is_loan == 'true':
         is_loan = True
     else:
@@ -135,10 +133,11 @@ def change_ranking(request, pk):
 def view_transactions(request, pk):
     user_account = Account.objects.get(account_id=pk)
     #this for loop finds and appends balance on the user account 
+    get_context = Account.get_transactions(user_account)
     context = {'user_account': user_account, "balance": ""}
-    context['balance']  = str(Account.balance(user_account))
-    context['transactions']  = Account.get_transactions(user_account)
+    context['balance']  = float(Account.balance(user_account))
+    context['transactions']  = get_context[0]
     context['account'] = user_account
-
+    context['direction'] = get_context[1]
 
     return render(request, 'banking_templates/view_transactions.html', context)

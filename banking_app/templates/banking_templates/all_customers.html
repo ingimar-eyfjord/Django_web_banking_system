@@ -4,6 +4,13 @@
 {% if request.user.is_staff %}
     <p>You are logged in as PayLater employee.</p>
 {% endif %}
+
+<style>
+    :root {
+      --width: 60vw;
+    }
+ 
+</style>
         <hr />
         <h3>Customers</h3>
         <label for="CustomerName2">Search for customer</label>
@@ -22,7 +29,7 @@
                     <th>Email</th>
                     <th>Phone number</th>
                     <th>Ranking</th>
-                    <th>Account</th>
+                    <th>Accounts</th>
             </thead>
                 </tr>
                 <tbody>
@@ -46,11 +53,13 @@
                                 <button type="submit">Update</button>
                             </form>
                         </td>
+                        <td>
                     {% for account in all_accounts %}
                     {% if account.user == customer %}
-                        <td>{{ account.account_id }}</td>
+                        <a href="{% url 'banking_app:view_transactions' account.account_id  %}">{{ account.account_id }}</a>&nbsp;&nbsp;|&nbsp;&nbsp;
                         {% endif %}
                         {% endfor %}
+                    </td>
                     </tr>
                     {% endif %}
                     {% endfor %}
