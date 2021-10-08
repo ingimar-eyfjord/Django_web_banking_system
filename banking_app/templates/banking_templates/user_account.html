@@ -1,27 +1,10 @@
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://classless.de/classless.css" />
-        <title>PayLater Bank My accounts</title>
-    </head>
-    <body>
+{% extends "banking_templates/base.html" %}
+{% block content %}
+{% load static %}
         {% if request.user.is_authenticated %}
-        <h1>Welcome back {{ user }}</h1>
-        <nav>
-            <a href="{% url 'logout' %}">Log out</a>
-        </nav>
-
-
-     
-       
-
+        <br>
         <h2>Your accounts</h2>
-           
         <hr><br>
-
         <div class="row">
             <div class="col">
                 <a>Make a transaction</a>
@@ -30,7 +13,6 @@
                 <a>Request a new loan</a>
             </div>
         </div>
-
         <hr>
 
         <h3>Accounts</h3>
@@ -46,8 +28,5 @@
         {% include "banking_templates/accounts_cards.html" %} 
         {% endif %}
         {% endfor %}
-
         {% endif %}
-
-    </body>
-</html>
+        {% endblock %}

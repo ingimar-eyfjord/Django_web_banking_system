@@ -7,7 +7,24 @@
         <title>PayLater Bank</title>
     </head>
     <body>
-
+        <nav class="row">
+                {% if request.user.is_authenticated %}
+                <a  class="col" href="{% url 'banking_app:index' %}">Home</a>
+                {% if request.user.is_staff %}
+                <a class="col" href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
+                <a class="col" href="{% url 'banking_app:all_customers' %}">View all users</a>
+                {% endif %}
+                {% if request.user.is_staff == False %}
+                <a class="col" href="{% url 'banking_app:my-accounts' request.user.pk %}">My accounts</a>
+                {% endif %}
+                <a class="col" href="{% url 'logout' %}">Log out</a>
+                {% else %}
+                <a class="col" href="{% url 'login' %}">Log in</a>
+                {% endif %}
+        </nav>
+        {% if request.user.is_authenticated %}
+        <h1>Welcome back {{request.user.username}}</h1>
+        {% endif %}
         {% block content %}
         {% endblock %}
         {% block footer %}

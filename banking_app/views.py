@@ -12,7 +12,6 @@ from pprint import pprint
 
 def index(request):
     user = request.user.username
-    #user_full_name = request.user.get_full_name()
     context = {
             'user': user,
             }
@@ -20,14 +19,11 @@ def index(request):
 
 @login_required
 def user_account(request, pk):
-   
     user_accounts = Account.objects.filter(user=pk)
-
-#this for loop finds and appends balance on the user account 
+    #this for loop finds and appends balance on the user account 
     for x in user_accounts:
         account_balance = Account.balance(x)
         x.balance = account_balance
-
     context = {
             'user' : request.user.username,
             'user_accounts': user_accounts,
@@ -39,13 +35,11 @@ def staff_home(request):
         if request.user.is_staff:
             all_users = User.objects.all().filter(is_staff=False)[:15]
             all_customers = Customer.objects.all()[:15]
-
             context = {
             "status": 200,
             'all_users': all_users,
             'all_customers': all_customers
             }
-
             return render(request, 'banking_templates/staff_home.html', context)
         else:
             context = {
@@ -135,3 +129,11 @@ def change_ranking(request, pk):
     ranking = request.POST['Ranking']
     Customer.change_rank(pk, ranking)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
+
+
+@login_required
+def view_transactions(request, pk):
+    context = {
+        
+    }
+    return render(request, 'banking_templates/view_transactions.html', context)

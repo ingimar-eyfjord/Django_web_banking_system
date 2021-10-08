@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://classless.de/classless.css" />
-        <script src="https://unpkg.com/htmx.org@1.6.0"></script>
-        <title>PayLater Bank Staff page</title>
-    </head>
-    <body>
-        {% if request.user.is_authenticated %}
-        <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
-        <nav>
-            <a href="{% url 'logout' %}">Log out</a>
-            <a href="{% url 'banking_app:all_customers' %}">View all users</a>
-        </nav>
-        {% endif %} {% if request.user.is_staff %}
+{% extends "banking_templates/base.html" %}
+{% block content %}
+{% load static %}
+        {% if request.user.is_staff %}
         <p>You are logged in as PayLater employee: {{ user }}</p>
         {% endif %}
         <hr />
@@ -48,7 +35,6 @@
                     <button type="reset">Clear fields</button>
                 </form>
             </fieldset>
-
             <fieldset>
                 <legend>Create an account for a customer</legend>
                 <form method="POST" action="{% url 'banking_app:create_account' %}">
@@ -85,10 +71,10 @@
             }
             else{
                 const remove = document.querySelectorAll("[data-remove]")
+                console.log(remove)
                 remove.forEach(e=>{
                     e.remove()
                 })
             }}
         </script>
-    </body>
-</html>
+   {% endblock %}

@@ -1,35 +1,12 @@
 {% extends "banking_templates/base.html" %}
-
 {% block content %}
 {% load static %}
-
-{% if request.user.is_authenticated %}
-<h1>Welcome back {{ request.user.first_name }} {{ request.user.last_name }}</h1>
-<nav>
-    {% if request.user.is_staff %}
-    <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
-    {% else %}
-    <a href="{% url 'banking_app:my-accounts' request.user.pk %}">My accounts</a>
-    {% endif %}
-    <a href="{% url 'logout' %}">Log out</a>
-</nav>
-{% else %}
-<h1>Welcome to PayLater Bank</h2>
-<nav>
-    <a href="{% url 'login' %}">Log in</a>
-</nav>
-{% endif %}
-
 {% if request.user.is_staff %}
     <p>You are logged in as PayLater employee.</p>
 {% endif %}
-
-
 <hr />
-
 <div>
     <h3>Request loans</h3>
     <a href="{% url 'login' %}">Click here to request a loan</a>
 </div>
-
 {% endblock %}

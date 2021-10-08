@@ -1,23 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://classless.de/classless.css">
-        <title>PayLater Bank Staff page</title>
-    </head>
-    <body>
-        <h1>Welcome back {{ user.first_name }} {{ user.last_name }}</h1>
-        <nav>
-            <a href="{% url 'logout' %}">Log out</a>
-            {% if request.user.is_staff %}
-            <a href="{% url 'banking_app:staff_home' %}">Go to Staff view</a>
-            {% endif %}
-        </nav>
+{% extends "banking_templates/base.html" %}
+{% block content %}
+{% load static %}
+{% if request.user.is_staff %}
+    <p>You are logged in as PayLater employee.</p>
+{% endif %}
         <hr />
-
         <h3>Customers</h3>
-
         <label for="CustomerName2">Search for customer</label>
         <input
                 type="text"
@@ -41,7 +29,6 @@
                     {% for user in all_users %}
                     {% for customer in all_customers %}
                     {% if customer.pk == user.pk %}
-
                     <tr class="user">
                         <td>{{ user.username }}</td>
                         <td>{{ user.first_name }}</td>
@@ -59,20 +46,15 @@
                                 <button type="submit">Update</button>
                             </form>
                         </td>
-
                     {% for account in all_accounts %}
-
                     {% if account.user == customer %}
-
                         <td>{{ account.account_id }}</td>
                         {% endif %}
                         {% endfor %}
-
                     </tr>
                     {% endif %}
                     {% endfor %}
                     {% endfor %}
                     <tbody>
         </table>
-   </body>
-</html>
+        {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "banking_templates/base.html" %}
+{% block content %}
+{% load static %}
+
+
+<h3>Accounts</h3>
+        {% for account in user_accounts %}
+        {% if account.is_loan == False %}
+        {% include "banking_templates/accounts_cards.html" %} 
+        {% endif %}
+        {% endfor %}
+
+
+{% endblock %}
