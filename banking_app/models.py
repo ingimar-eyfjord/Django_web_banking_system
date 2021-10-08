@@ -81,15 +81,16 @@ class Account(models.Model):
             new_loan_account.save()
             Ledger.create_loan_transaction(loan_account_id, new_account, Amount)
 
-    @property
     def balance(self):
-        return Ledger.object.filter(account_id=self).aggregate(Sum('amount'))
+        print(self)
+        return Ledger.objects.filter(account=self)
+        # return Ledger.objects.filter(account_id=self).aggregate(sum('amount'))
 
     @property
     def get_transactions(self):
 #   {make code to get all transactions maybe limit by 50 or something}
 #   Entry.objects.all()[:10:2] =  transactions OFFSET 5 LIMIT 5 (current, limit = 5)
-        return Ledger.object.filter(account_id=self)[:5]
+        return Ledger.objects.filter(account_id=self)[:5]
 
     def __str__(self):
         return f"{self.account_id}" ### Changed this to only get the Account id because of the create loan / transactions

@@ -20,12 +20,21 @@ def index(request):
 
 @login_required
 def user_account(request, pk):
-    user_accounts = Account.objects.all()
-    user_ledger = Ledger.objects.all()
+   
+    user_accounts = Account.objects.filter(user=pk)
+
+    for x in user_accounts:
+        account_balance = Account.balance(x.account_id)
+        print(account_balance, x.account_id)
+
+    # user_balances = Account.balance(user_accounts)
+    # user_ledger = Ledger.objects.filter(account=user_accounts)
+    # print(user_ledger)
+
     context = {
             'user' : request.user.username,
             'user_accounts': user_accounts,
-            'user_ledger': user_ledger,
+            # 'user_ledger': user_balances,
             }
     return render(request, 'banking_templates/user_account.html', context)
 
