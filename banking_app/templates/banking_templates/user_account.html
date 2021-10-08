@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,40 +13,41 @@
         <nav>
             <a href="{% url 'logout' %}">Log out</a>
         </nav>
-        <p>Here is an overview of your accounts</p>
+
+
+     
+       
+
+        <h2>Your accounts</h2>
+           
+        <hr><br>
+
+        <div class="row">
+            <div class="col">
+                <a>Make a transaction</a>
+            </div>
+            <div class="col">
+                <a>Request a new loan</a>
+            </div>
+        </div>
+
         <hr>
+
         <h3>Accounts</h3>
-                    {% for account in user_accounts %}
-                        <div class="card">
-                        <div class="row">
-                            <div class="col">
-                                <h4>Account name</h4>
-                            </div>
-                            <div class="col">
-                                <p>Account type</p>
-                            </div>
-                            <div class="col">
-                            <p>Balance</p>
-                            </div>
-                            </div>
-                        <hr>
-                        <div class="row">
-                        <div class="col">
-                        <p>{{ account.account_id }}</p>
-                        </div>
-                        <div class="col">
-                            {% if account.is_loan == True %}
-                            <p>Loan</p>
-                            {% else %}
-                            <p>Normal</p>
-                            {% endif %}
-                        </div>
-                        <div class="col">
-                        <p>{{ account.balance }}</p>
-                        </div>
-                        </div>
-                       </div>
-        {% endfor %}
+        {% for account in user_accounts %}
+        {% if account.is_loan == False %}
+        {% include "banking_templates/accounts_cards.html" %} 
         {% endif %}
+        {% endfor %}
+
+        <h3>Loans</h3>
+        {% for account in user_accounts %}
+        {% if account.is_loan == True %}
+        {% include "banking_templates/accounts_cards.html" %} 
+        {% endif %}
+        {% endfor %}
+
+        {% endif %}
+
     </body>
 </html>

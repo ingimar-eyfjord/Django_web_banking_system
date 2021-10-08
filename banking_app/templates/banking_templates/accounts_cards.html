@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="row">
+        <div class="col">
+            <h4>Account name</h4>
+        </div>
+        <div class="col">
+            <h4>Account number</h4>
+        </div>
+        <div class="col">
+        <h4>Balance</h4>
+        </div>
+        </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <p>We should make it?</p>
+        </div>
+    <div class="col">
+    <p>{{ account.account_id }}</p>
+    </div>
+    <div class="col">
+    <p>{{ account.balance }}</p>
+    </div>
+    </div>
+    <div class="row">
+        {% if account.is_loan == True %}
+        <div class="col">
+        <a>Manage loan</a>
+    </div>
+        {% else %}
+        <div class="col">
+            <a>Make a transaction</a>
+        </div>
+        {% endif %}
+        <div class="col">
+            <a>View transactions</a>
+        </div>
+        <div class="col">
+            {% if account.is_loan == False %}
+            <a>Take out loan</a>
+            {% endif %}
+        </div>
+    </div>
+   </div>

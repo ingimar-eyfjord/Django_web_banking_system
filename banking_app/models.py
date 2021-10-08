@@ -81,18 +81,14 @@ class Account(models.Model):
             Ledger.create_loan_transaction(loan_account_id, new_account, Amount)
 
     def balance(self):
+        # This is not working, it says cannot aggregate sum string.
+        # return Ledger.objects.filter(account=self).aggregate(sum('amount'))
         legderObject = Ledger.objects.filter(account=self)
         balance = 0
         for x in legderObject:
             balance = balance + x.amount
         return balance
-
-        # return Ledger.objects.filter(account=self).aggregate(sum('amount'))
-
-        # balance = Ledger.objects.filter(transaction_id="transaction_id").aggregate(sum('amount'))
-        
-        
-
+       
     def get_transactions(self):
         legderObject = Ledger.objects.filter(transaction_id=self)
         transactions = []
