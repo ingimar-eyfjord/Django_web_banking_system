@@ -64,32 +64,31 @@
                     <label for="AccountName">Account name</label>
                     <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
 
-
+                    <label for="loan"> User is requesting a loan</label>
                     <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
-                    <label for="loan"> User requests a loan</label><br><br>
-                    <label for="loaned">Amount in the account</label>
-                    <input placeholder="Amount 0.0$" onchange="updateNumber(this)"
-                                                     onkeydown="updateNumber(this)" type="number" id="loaned"  >
-                                                     <button type="submit">Create the account</button>
+                    <div id="insertLoanedAmount"></div>
+
+                    <button type="submit">Create the account</button>
                 </form>
             </fieldset>
         </div>
         <script>
-            function updateNumber(element){
-                            if(IsLoan.checked){
-                                            element.value = -Math.abs(element.value)
-                                        }
-                            else{
-                                            loaned.value = Math.abs(loaned.value)
-                                        }
-                        }
             function updateItSaLoan(element){
-                            if(element.checked){
-                                            loaned.value = -Math.abs(loaned.value)
-                                        }else{
-                                                        loaned.value = Math.abs(loaned.value)
-                                                    }
-                        }
+            if(element.checked){
+                insertLoanedAmount.insertAdjacentHTML("afterend",`
+            <label id="loanedLabel" data-remove for="loaned">Amount to loan</label>
+            <input placeholder="Amount 0.0$" data-remove type="number" id="loaned" min="1" name="Amount" >`)
+            const number = document.getElementById('loaned');
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8)) {
+                    return false;}}
+            }
+            else{
+                const remove = document.querySelectorAll("[data-remove]")
+                remove.forEach(e=>{
+                    e.remove()
+                })
+            }}
         </script>
     </body>
 </html>
