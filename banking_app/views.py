@@ -8,7 +8,7 @@ from django.urls import reverse
 from datetime import date
 from datetime import datetime
 import secrets
-
+from pprint import pprint
 
 def index(request):
     user = request.user.username
@@ -23,18 +23,14 @@ def user_account(request, pk):
    
     user_accounts = Account.objects.filter(user=pk)
 
+#this for loop finds and appends balance on the user account 
     for x in user_accounts:
-        account_balance = Account.balance(x.account_id)
-        print(account_balance, x.account_id)
-
-    # user_balances = Account.balance(user_accounts)
-    # user_ledger = Ledger.objects.filter(account=user_accounts)
-    # print(user_ledger)
+        account_balance = Account.balance(x)
+        x.balance = account_balance
 
     context = {
             'user' : request.user.username,
             'user_accounts': user_accounts,
-            # 'user_ledger': user_balances,
             }
     return render(request, 'banking_templates/user_account.html', context)
 

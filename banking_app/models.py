@@ -75,22 +75,38 @@ class Account(models.Model):
         new_account = Account(user=user, is_loan=False, account_id=account_id)
         new_account.save()
         if is_loan == True:
-            print("----------Called---------------")
             loan_account_id = create_account_id()
             new_loan_account = Account(user=user, is_loan=True, account_id=loan_account_id)
             new_loan_account.save()
             Ledger.create_loan_transaction(loan_account_id, new_account, Amount)
 
     def balance(self):
-        print(self)
-        return Ledger.objects.filter(account=self)
-        # return Ledger.objects.filter(account_id=self).aggregate(sum('amount'))
+        legderObject = Ledger.objects.filter(account=self)
+        balance = 0
+        for x in legderObject:
+            balance = balance + x.amount
+        return balance
 
-    @property
+        # return Ledger.objects.filter(account=self).aggregate(sum('amount'))
+
+        # balance = Ledger.objects.filter(transaction_id="transaction_id").aggregate(sum('amount'))
+        
+        
+
     def get_transactions(self):
-#   {make code to get all transactions maybe limit by 50 or something}
-#   Entry.objects.all()[:10:2] =  transactions OFFSET 5 LIMIT 5 (current, limit = 5)
-        return Ledger.objects.filter(account_id=self)[:5]
+        legderObject = Ledger.objects.filter(transaction_id=self)
+        transactions = []
+        for x in legderObject:
+            transaction = {
+            'account_id': x.account_id,
+            'ledger_amount': x.amount,
+            'transaction_id': x.transaction_id,
+            'transaction_date': x.transaction_date,
+            }
+            transactions.append(transaction)
+        print()
+        return transactions
+
 
     def __str__(self):
         return f"{self.account_id}" ### Changed this to only get the Account id because of the create loan / transactions
