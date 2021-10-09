@@ -51,9 +51,10 @@
 			</ul>
 		</nav>
 
-		<h1>Welcome to PayLater bank</h1>
 		{% if request.user.is_authenticated %}
 		<h1>Welcome back {{request.user.first_name}} {{request.user.last_name}}</h1>
+		{% else %}
+		<h1>Welcome to PayLater bank</h1>
 		{% endif %} {% block content %} {% endblock %} {% block footer %}
 		<footer class="footer"> <p>Copyright © {{year}} PayLater Bank</p></footer>
 		{% endblock %}
