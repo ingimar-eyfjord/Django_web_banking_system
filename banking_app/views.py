@@ -157,9 +157,12 @@ def make_transaction(request, pk):
         CreditToo = Account.objects.get(account_id=request.POST['account_id'])
         amount_credit = float(request.POST['Amount'])
         amount_debit = -float(request.POST['Amount'])
+        # CreditToo = Customer.objects.select_related().get(user=request.POST['account_id'])
+        user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
+        user_credit = Customer.objects.select_related().get(user=CreditToo.user)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id, "to")
-        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, "from")
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id, user_credit)
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user_debit)
         context = {}
         return HttpResponseRedirect(reverse('banking_app:index'))
     

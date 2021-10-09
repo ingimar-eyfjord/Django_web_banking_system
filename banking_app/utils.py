@@ -15,6 +15,7 @@ def return_transaction(parameter):
             'ledger_amount': float(x.amount),
             'transaction_id': x.transaction_id,
             'transaction_date': x.transaction_date,
+            'account_owner': x.account_owner.split('-')[0]
             }
         transactions.append(transaction)
     return transactions
