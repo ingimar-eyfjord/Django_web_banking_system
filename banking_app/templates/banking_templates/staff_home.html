@@ -1,12 +1,7 @@
 {% extends "banking_templates/base.html" %}
 {% block content %}
 {% load static %}
-<style>
-    :root {
-      --width: 60vw;
-    }
- 
-</style>
+
         {% if request.user.is_staff %}
         <p>You are logged in as PayLater employee: {{ user }}</p>
         {% endif %}
