@@ -111,8 +111,12 @@ def all_customers(request):
 def create_account(request):
     pk = request.POST['pk']
     user = get_object_or_404(Customer, pk=pk)
-    is_loan = request.POST['loan']
-    Amount = request.POST['Amount']
+    is_loan = False
+    Amount = 0
+    if request.POST.get('loan', 0):
+        is_loan = request.POST['loan']
+    if request.POST.get('Amount', 0):
+        Amount = request.POST['Amount']
     account_name = request.POST['account_name']
     if is_loan == 'true':
         accounts = Account.objects.filter(user=user)
