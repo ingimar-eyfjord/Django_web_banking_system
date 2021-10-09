@@ -1,12 +1,18 @@
 {% extends "banking_templates/base.html" %}
 {% block content %}
 {% load static %}
+<style>
+    :root {
+      --width: 60vw;
+    }
+ 
+</style>
         {% if request.user.is_staff %}
         <p>You are logged in as PayLater employee: {{ user }}</p>
         {% endif %}
         <hr />
         <div class="row">
-            <fieldset>
+            <fieldset style="margin-right: 2rem;">
                 <legend>Create a Customer</legend>
                 <form action="{% url 'banking_app:create_user' %}" method="POST">
                     {% csrf_token %}
@@ -35,7 +41,7 @@
                     <button type="reset">Clear fields</button>
                 </form>
             </fieldset>
-            <fieldset>
+            <fieldset style="margin-left: 2rem;">
                 <legend>Create an account for a customer</legend>
                 <form method="POST" action="{% url 'banking_app:create_account' %}">
                     {% csrf_token %}
