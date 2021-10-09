@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
 from .utils import create_transaction_id
 import secrets
 from pprint import pprint
@@ -14,8 +13,10 @@ from pprint import pprint
 
 def index(request):
     user = request.user.username
+    year = datetime.now().year
     context = {
         'user': user,
+        'year': year
     }
     return render(request, 'banking_templates/index.html', context)
 
@@ -119,28 +120,27 @@ def create_account(request):
     user = get_object_or_404(Customer, pk=pk)
     is_loan = False
     Amount = 0
+    account_name = request.POST['account_name']
 
     if request.POST.get('loan', 0):
         is_loan = request.POST['loan']
     if request.POST.get('Amount', 0):
         Amount = request.POST['Amount']
 
+     # Get all accounts of the current user
     accounts = Account.objects.filter(user=user)
-    print(accounts)
     if accounts.count() == 0:
         account_name = "NemKonto"
-        # Account.open_account(user, is_loan, account_name, Amount)
-    else:
-        account_name = request.POST['account_name']
-        if is_loan == 'true':
-            account_name = request.POST['loan_type']
-            is_loan = True
-        else:
-            is_loan = False
 
-    # Account.open_account(user=user, is_loan=is_loan,
-    #                      account_name=account_name, Amount=Amount)
-    return HttpResponseRedirect(reverse('banking_app:all_customers'))
+    if is_loan == 'true':
+        is_loan = True
+        account_name = request.POST['loan_type']
+    else:
+        is_loan = False
+
+    Account.open_account(user=user, account_name=account_name,
+                         is_loan=is_loan, Amount=Amount)
+    return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
 @login_required
