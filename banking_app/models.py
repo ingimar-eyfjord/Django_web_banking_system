@@ -105,11 +105,11 @@ class Ledger(models.Model):
             max_length = 255,
             editable=False,
             )
- #transaction ID must not be uniques because there should be two of them 
+ #transaction ID must not be uniques because there should be two of them
 
-    def create_transaction(PassedAmount, account_id, trans_id, Account_owner):
+    def create_transaction(PassedAmount, account_id, trans_id, account_owner):
         #add here check if balance is direction <= 0 if from
-        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id, Account_owner=Account_owner)
+        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id, account_owner=account_owner)
         transaction.save()
     # Ledger.create_loan_transaction(new_account, Amount, user)
     def create_loan_transaction(debit_acc_id, CreditToo, amount, user):
@@ -119,8 +119,8 @@ class Ledger(models.Model):
         trans_id = create_transaction_id()
         Ledger.create_transaction(amount_credit, CreditToo, trans_id, user)
         Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user)
-        
+
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"
 
-   
+
