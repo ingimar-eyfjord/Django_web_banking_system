@@ -114,6 +114,10 @@ class Account(models.Model):
 class Ledger(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=225, decimal_places=2)
+    cd = models.CharField(
+            max_length = 255,
+            editable=False,
+            )
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(
             max_length = 255,
@@ -123,7 +127,7 @@ class Ledger(models.Model):
 
     def create_transaction(PassedAmount, account_id, trans_id, direction):
         #add here check if balance is direction <= 0 if from
-        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id)
+        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id,cd=direction)
         transaction.save()
     # Ledger.create_loan_transaction(new_account, Amount, user)
     def create_loan_transaction(debit_acc_id, CreditToo, amount, user):
@@ -131,8 +135,8 @@ class Ledger(models.Model):
         amount_credit = float(amount)
         amount_debit = -float(amount)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id, "too")
-        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, "from")
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id, user)
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user)
         
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"

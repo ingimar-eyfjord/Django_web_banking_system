@@ -121,7 +121,7 @@ def create_account(request):
     if is_loan == 'true':
         accounts = Account.objects.filter(user=user)
         if accounts.count() == 0:
-            Account.open_account(user=user, is_loan=False,account_name=request.POST['account_name'], Amount=Amount)  
+            Account.open_account(user=user, is_loan=False,account_name="NemKonto", Amount=Amount)  
         account_name = request.POST['loan_type']
         is_loan = True
     else:
