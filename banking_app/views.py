@@ -24,6 +24,8 @@ def index(request):
 @login_required
 def user_account(request, pk):
     user_accounts = Account.objects.filter(user=pk)
+    customer_info = Customer.objects.get(user=pk)
+
     # this for loop finds and appends balance on the user account
     for x in user_accounts:
         print(x)
@@ -31,6 +33,7 @@ def user_account(request, pk):
     context = {
         'user': request.user.username,
         'user_accounts': user_accounts,
+        'customer_info': customer_info
     }
     return render(request, 'banking_templates/user_account.html', context)
 
@@ -177,8 +180,10 @@ def make_transaction(request, pk):
         user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
         user_credit = Customer.objects.select_related().get(user=CreditToo.user)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id, user_credit)
-        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user_debit)
+        Ledger.create_transaction(
+            amount_credit, CreditToo, trans_id, user_credit)
+        Ledger.create_transaction(
+            amount_debit, DebitFrom, trans_id, user_debit)
         context = {}
         return HttpResponseRedirect(reverse('banking_app:make_transaction'))
 
