@@ -26,6 +26,11 @@ margin: 5px 0 0 0;
         <div class="col">
             <h4>Account name</h4>
         </div>
+        {% if request.user.is_staff %}
+        <div class="col">
+            <p>Account id</p>
+        </div>
+        {% endif %}
         <div class="col">
         <h4>Amount</h4>
         </div>

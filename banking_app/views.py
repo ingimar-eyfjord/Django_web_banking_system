@@ -162,4 +162,5 @@ def make_transaction(request, pk):
         'accounts': Account.objects.exclude(pk=DebitFrom.pk),
         'balance': float(Account.balance(DebitFrom))
     }
+    print(context)
     return render(request, 'banking_templates/make_transaction.html', context)

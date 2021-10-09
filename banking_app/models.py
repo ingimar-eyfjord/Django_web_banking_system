@@ -75,7 +75,7 @@ class Account(models.Model):
             loan_account_id = create_account_id()
             new_loan_account = Account(user=user, is_loan=True, account_id=loan_account_id)
             new_loan_account.save()
-            Ledger.create_loan_transaction(loan_account_id, new_account, Amount)
+            Ledger.create_loan_transaction(new_loan_account, new_account, Amount)
 
     def balance(self):
         # This is not working, it says cannot aggregate sum string.
