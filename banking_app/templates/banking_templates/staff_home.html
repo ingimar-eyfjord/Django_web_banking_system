@@ -49,12 +49,13 @@
                         {% endif %} {% endfor %} {% endfor %}
                     </select>
                     <label for="AccountName">Account name</label>
-                    <input type="text" name="AccountName" placeholder="Account name" id="AccountName" />
+                    <input type="text" name="account_name" placeholder="Account name" id="AccountName" />
 
                     <label for="loan"> User is requesting a loan</label>
                     <input onchange="updateItSaLoan(this)" type="checkbox" id="loan" name="loan" value="true">
                     <div id="insertLoanedAmount"></div>
 
+                   
                     <button type="submit">Create the account</button>
                 </form>
             </fieldset>
@@ -64,7 +65,14 @@
             if(element.checked){
                 insertLoanedAmount.insertAdjacentHTML("afterend",`
             <label id="loanedLabel" data-remove for="loaned">Amount to loan</label>
-            <input placeholder="Amount 0.0$" data-remove type="number" id="loaned" min="1" name="Amount" >`)
+            <input placeholder="Amount 0.0$" data-remove type="number" id="loaned" min="1" name="Amount" >
+            <label for="loan_type">Which type of loan</label>
+                    <select name="loan_type" id="loan_type" placeholder="Loan type">
+                        <option value="Home loan">Home loan</option>
+                        <option value="Home loan">Car loan</option>
+                        <option value="Home loan">Vacation loan</option>
+                        <option value="Home loan">Boat loan</option>
+                    </select>`)
             const number = document.getElementById('loaned');
             number.onkeydown = function(e) {
                 if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8)) {

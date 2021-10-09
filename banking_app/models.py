@@ -58,6 +58,7 @@ class Customer(models.Model):
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    account_name = models.CharField(max_length = 30,editable=True)
     is_loan = models.BooleanField(False)
     account_id = models.CharField(
             max_length = 5,
@@ -66,16 +67,12 @@ class Account(models.Model):
             default=create_account_id,
             )
 
-    def open_account(user, is_loan, Amount):
-        user = user
-        account_id = create_account_id()
-        new_account = Account(user=user, is_loan=False, account_id=account_id)
+    def open_account(user, is_loan, account_name, Amount):
+        accounts = Account.objects.filter(user=user)
+        new_account = Account(user=user, is_loan=is_loan, account_name=account_name)
         new_account.save()
         if is_loan == True:
-            loan_account_id = create_account_id()
-            new_loan_account = Account(user=user, is_loan=True, account_id=loan_account_id)
-            new_loan_account.save()
-            Ledger.create_loan_transaction(new_loan_account, new_account, Amount)
+            Ledger.create_loan_transaction(new_account, accounts[0], Amount, user)
 
     def balance(self):
         # This is not working, it says cannot aggregate sum string.
@@ -124,19 +121,18 @@ class Ledger(models.Model):
             )
  #transaction ID must not be uniques because there should be two of them 
 
-    def create_transaction(PassedAmount, account_id, trans_id):
+    def create_transaction(PassedAmount, account_id, trans_id, direction):
+        #add here check if balance is direction <= 0 if from
         transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id)
         transaction.save()
-
-    def create_loan_transaction(debit_acc_id, credit_acc_id, amount):
-        print(debit_acc_id, credit_acc_id)
-        CreditToo = Account.objects.get(account_id=credit_acc_id)
+    # Ledger.create_loan_transaction(new_account, Amount, user)
+    def create_loan_transaction(debit_acc_id, CreditToo, amount, user):
         DebitFrom = Account.objects.get(account_id=debit_acc_id)
         amount_credit = float(amount)
         amount_debit = -float(amount)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id)
-        Ledger.create_transaction(amount_debit, DebitFrom, trans_id)
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id, "too")
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, "from")
         
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"

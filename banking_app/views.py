@@ -113,13 +113,16 @@ def create_account(request):
     user = get_object_or_404(Customer, pk=pk)
     is_loan = request.POST['loan']
     Amount = request.POST['Amount']
+    account_name = request.POST['account_name']
     if is_loan == 'true':
+        accounts = Account.objects.filter(user=user)
+        if accounts.count() == 0:
+         Account.open_account(user=user, is_loan=False,account_name=request.POST['Amount'], Amount=Amount)   
+        account_name = request.POST['loan_type'], 
         is_loan = True
     else:
         is_loan = False
-    hexstr = secrets.token_hex(4)
-    #account_id = int(hexstr, 16)
-    Account.open_account(user=user, is_loan=is_loan, Amount=Amount)
+    Account.open_account(user=user, is_loan=is_loan,account_name=account_name, Amount=Amount)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
 
 
@@ -151,8 +154,8 @@ def make_transaction(request, pk):
         amount_credit = float(request.POST['Amount'])
         amount_debit = -float(request.POST['Amount'])
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id)
-        Ledger.create_transaction(amount_debit, DebitFrom, trans_id)
+        Ledger.create_transaction(amount_credit, CreditToo, trans_id, "to")
+        Ledger.create_transaction(amount_debit, DebitFrom, trans_id, "from")
         context = {}
         return HttpResponseRedirect(reverse('banking_app:index'))
     

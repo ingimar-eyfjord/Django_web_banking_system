@@ -35,7 +35,7 @@
         <label for="account_id">Select account id</label>
         <select name="account_id" id="account_id" placeholder="Customer name; customer phone number; customer id">
             {% for acc in accounts %}
-            <option value={{ acc }}>{{ acc }}</option>
+            <option value="{{ acc }}">{{ acc }}</option>
             {% endfor %}
         </select>
         <label for="Amount">Amount to transfer</label>
