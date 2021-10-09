@@ -96,21 +96,6 @@ class Account(models.Model):
         for x in legder:
             from_transaction = Ledger.objects.all().filter(transaction_id=x.transaction_id)
             from_transaction = return_transaction(from_transaction)
-            # this loop will tell us who is transfering and who is receiving money
-            for who in from_transaction:
-                if who['account_id'] != self:
-                    if float(who['ledger_amount']) < 0:
-                        is_from = {'from': who['account_id']}
-                        direction.append(is_from)
-                if who['account_id'] == self:
-                    if float(who['ledger_amount']) < 0:
-                        is_from = {'from': self}
-                        direction.append(is_from)
-                if who['account_id'] == self:
-                    if float(who['ledger_amount']) > 0:
-                        is_to = {'to': self}
-                        direction.append(is_to)
-
             transactions.append(from_transaction)
         return [transactions, direction]
 
@@ -122,21 +107,17 @@ class Account(models.Model):
 class Ledger(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=225, decimal_places=2)
-    cd = models.CharField(
-        max_length=255,
-        editable=False,
-    )
+    account_owner = models.CharField(max_length = 255)
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(
-        max_length=255,
-        editable=False,
-    )
- # transaction ID must not be uniques because there should be two of them
+            max_length = 255,
+            editable=False,
+            )
+ #transaction ID must not be uniques because there should be two of them
 
-    def create_transaction(PassedAmount, account_id, trans_id, direction):
-        # add here check if balance is direction <= 0 if from
-        transaction = Ledger(
-            amount=PassedAmount, account=account_id, transaction_id=trans_id, cd=direction)
+    def create_transaction(PassedAmount, account_id, trans_id, account_owner):
+        #add here check if balance is direction <= 0 if from
+        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id, account_owner=account_owner)
         transaction.save()
     # Ledger.create_loan_transaction(new_account, Amount, user)
 
@@ -150,3 +131,5 @@ class Ledger(models.Model):
 
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"
+
+
