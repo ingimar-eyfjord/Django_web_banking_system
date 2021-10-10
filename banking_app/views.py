@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Customer, Account, Ledger
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from datetime import date, datetime
 from .utils import create_transaction_id
@@ -169,25 +169,34 @@ def view_transactions(request, pk):
 
 @ login_required
 def make_transaction(request, pk):
+    status = ''
+    # Find the debit/from account
     DebitFrom = Account.objects.get(account_id=pk)
-    current_account = request.POST.get('account_id')
+    # Current balance of the debit/from account
+    current_balance = float(Account.balance(DebitFrom))
 
     if request.method == "POST":
+        # Find the credit/to account
+        current_account = request.POST.get('account_id')
         credit_to_acc = int(current_account[:11])
         CreditTo = Account.objects.get(account_id=credit_to_acc)
-        amount_credit = float(request.POST['Amount'])
-        amount_debit = -float(request.POST['Amount'])
-        # CreditTo = Customer.objects.select_related().get(user=request.POST['account_id'])
+
+        # Find the account_owners
         user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
         user_credit = Customer.objects.select_related().get(
             user=CreditTo.user)
-        # print(CreditTo.account_id, "|", user_debit, "|", user_credit)
         trans_id = create_transaction_id()
+
+        # Convert transfer amount to float
+        amount_credit = float(request.POST['Amount'])
+        amount_debit = -float(request.POST['Amount'])
+
         Ledger.create_transaction(
-            amount_credit,  CreditTo, trans_id, user_credit)
+            amount_credit, CreditTo, trans_id, user_credit)
         Ledger.create_transaction(
             amount_debit, DebitFrom, trans_id, user_debit)
-        context = {}
+        status = 'Success'
+        print("success", status)
         return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
 
     context = {

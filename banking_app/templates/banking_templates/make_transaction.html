@@ -18,15 +18,25 @@
 			<h4>Account balance</h4>
 			{% if balance <= 0 %}
 			<h4 style="color: red">{{balance}}</h4>
-			{% endif %} {% if balance >= 0 %}
+			{% endif %} {% if balance > 0 %}
 			<h4 style="color: green">{{balance}}</h4>
 			{% endif %}
 		</div>
 	</div>
 </div>
 <br />
+
 <fieldset>
 	<legend>Make a transaction</legend>
+	<p>Status: <span>{{ status }}</span></p>
+	<!-- <p
+		>Status: {% if status == 'Failed' %}<span
+			>Your balance is not sufficient for this transaction </span
+		>{% endif %} {% if status == 'Success' %}<span
+			>Transaction is successful </span
+		>{% endif %}</p
+	> -->
+	<br />
 	<form method="POST" action="{% url 'banking_app:make_transaction' account %}">
 		{% csrf_token %}
 		<label for="account_id">Select account id</label>
