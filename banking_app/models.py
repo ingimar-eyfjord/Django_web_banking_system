@@ -77,8 +77,10 @@ class Account(models.Model):
                               account_name=account_name)
         new_account.save()
         if is_loan == True:
+            print(new_account.account_id, accounts[0], Amount, user)
+            # print(Ledger.create_loan_transaction())
             Ledger.create_loan_transaction(
-                new_account, accounts[0], Amount, user)
+                new_account.account_id, accounts[0], Amount, user)
 
     def balance(self):
         # This is not working, it says cannot aggregate sum string.
@@ -107,29 +109,28 @@ class Account(models.Model):
 class Ledger(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=225, decimal_places=2)
-    account_owner = models.CharField(max_length = 255)
+    account_owner = models.CharField(max_length=255)
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(
-            max_length = 255,
-            editable=False,
-            )
- #transaction ID must not be uniques because there should be two of them
+        max_length=255,
+        editable=False,
+    )
+ # transaction ID must not be uniques because there should be two of them
 
     def create_transaction(PassedAmount, account_id, trans_id, account_owner):
-        #add here check if balance is direction <= 0 if from
-        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id, account_owner=account_owner)
+        # add here check if balance is direction <= 0 if from
+        transaction = Ledger(amount=PassedAmount, account=account_id,
+                             transaction_id=trans_id, account_owner=account_owner)
         transaction.save()
     # Ledger.create_loan_transaction(new_account, Amount, user)
 
-    def create_loan_transaction(debit_acc_id, CreditToo, amount, user):
+    def create_loan_transaction(debit_acc_id, CreditTo, amount, user):
         DebitFrom = Account.objects.get(account_id=debit_acc_id)
         amount_credit = float(amount)
         amount_debit = -float(amount)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id, user)
+        Ledger.create_transaction(amount_credit, CreditTo, trans_id, user)
         Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user)
 
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"
-
-

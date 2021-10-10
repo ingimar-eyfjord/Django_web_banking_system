@@ -146,14 +146,14 @@ def create_account(request):
     return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
-@login_required
+@ login_required
 def change_ranking(request, pk):
     ranking = request.POST['Ranking']
     Customer.change_rank(pk, ranking)
     return HttpResponseRedirect(reverse('banking_app:all_customers'))
 
 
-@login_required
+@ login_required
 def view_transactions(request, pk):
     user_account = Account.objects.get(account_id=pk)
     # this for loop finds and appends balance on the user account
@@ -167,25 +167,28 @@ def view_transactions(request, pk):
     return render(request, 'banking_templates/view_transactions.html', context)
 
 
-@login_required
+@ login_required
 def make_transaction(request, pk):
     DebitFrom = Account.objects.get(account_id=pk)
-    current_account = Account.objects.filter(user=pk)
+    current_account = request.POST.get('account_id')
 
     if request.method == "POST":
-        CreditToo = Account.objects.get(account_id=request.POST['account_id'])
+        credit_to_acc = int(current_account[:11])
+        CreditTo = Account.objects.get(account_id=credit_to_acc)
         amount_credit = float(request.POST['Amount'])
         amount_debit = -float(request.POST['Amount'])
-        # CreditToo = Customer.objects.select_related().get(user=request.POST['account_id'])
+        # CreditTo = Customer.objects.select_related().get(user=request.POST['account_id'])
         user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
-        user_credit = Customer.objects.select_related().get(user=CreditToo.user)
+        user_credit = Customer.objects.select_related().get(
+            user=CreditTo.user)
+        # print(CreditTo.account_id, "|", user_debit, "|", user_credit)
         trans_id = create_transaction_id()
         Ledger.create_transaction(
-            amount_credit, CreditToo, trans_id, user_credit)
+            amount_credit,  CreditTo, trans_id, user_credit)
         Ledger.create_transaction(
             amount_debit, DebitFrom, trans_id, user_debit)
         context = {}
-        return HttpResponseRedirect(reverse('banking_app:make_transaction'))
+        return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
 
     context = {
         'account': int(pk),
