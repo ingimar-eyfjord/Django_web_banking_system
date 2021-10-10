@@ -1,3 +1,4 @@
+{% load tz %}
 <style>
 
 .card .row{
@@ -25,7 +26,7 @@ margin: 5px 0 0 0;
         </div>
         {% if request.user.is_staff %}
         <div class="col">
-            <p>Account id</p>
+            <h4>Account id</h4>
         </div>
         {% endif %}
         <div class="col">
@@ -44,7 +45,7 @@ margin: 5px 0 0 0;
         </div>
         {% if request.user.is_staff %}
         <div class="col">
-            <p>{{transaction.account_id}}</p>
+            <p>{{transaction.account_id|truncatechars:11}}</p>
         </div>
         {% endif %}
         <div class="col">
@@ -55,10 +56,10 @@ margin: 5px 0 0 0;
             {% endif %}
         </div>
         <div class="col">
-        <p> {{transaction.transaction_id}} </p>
+        <p style="word-break: break-all;">{{transaction.transaction_id}}</p>
         </div>
         <div class="col">
-        <p> {{transaction.transaction_date}} </p>
+        <p> {{transaction.transaction_date|timezone:"Europe/Copenhagen"}} </p>
         </div>
     </div>
 </div>
