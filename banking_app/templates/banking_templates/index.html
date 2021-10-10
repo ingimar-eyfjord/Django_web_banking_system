@@ -1,12 +1,61 @@
+<style>
+.banner{
+    width: 100%;
+    text-align: center;
+}
+.section{
+    display: flex;
+    margin: 50px 0;
+}
+.l{
+    background: #1277CC;
+    height: 25vh;
+    text-align:center
+}
+.col-2{
+    height: auto;
+    background: url(https://i.ibb.co/LhqLH3q/branch-danske-bank.jpg) no-repeat;
+    background-size: cover;
+    width: 60%;
+}
+.gray{
+    background: #f5f6f7 !important;
+}
+.col{
+    width: 40%;
+    display:flex;
+    flex-direction: column;
+}
+</style>
 {% extends "banking_templates/base.html" %}
 {% block content %}
 {% load static %}
 {% if request.user.is_staff %}
-    <p>You are logged in as PayLater employee.</p>
+<p>You are logged in as PayLater employee.</p>
 {% endif %}
 <hr />
+{% if request.user.is_authenticated == False %}
+<div class="banner">
+    <h1>PayLater Bank</h1>
+</div>
+<div class="section">
+    <div class="col">
+        <div class="l">
+            <h3 style="color: white">Loan now. Pay Later</h3>
+            <a href="{% url 'login' %}" style="color: white">Request a loan</a>
+        </div>
+        <div class="l gray">
+            <h3>Become a customer</h3>
+            <a href="">Contact us</a>
+        </div>
+    </div>
+    <div class="col-2"
+    </div>
+</div>
+{% else %}
 <div>
-    <h3>Request loans</h3>
+    <h3>Loan now. Pay Later</h3>
     <a href="{% url 'login' %}">Click here to request a loan</a>
 </div>
+{% endif %}
 {% endblock %}
