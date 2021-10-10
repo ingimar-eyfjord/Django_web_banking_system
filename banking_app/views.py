@@ -175,34 +175,41 @@ def make_transaction(request, pk):
     # Current balance of the debit/from account
     current_balance = float(Account.balance(DebitFrom))
 
-    if request.method == "POST":
-        # Find the credit/to account
-        current_account = request.POST.get('account_id')
-        credit_to_acc = int(current_account[:11])
-        CreditTo = Account.objects.get(account_id=credit_to_acc)
+    if HttpResponse.status_code == 200:
+        status = 'Start'
+        if request.method == "POST":
+            # Find the credit/to account
+            current_account = request.POST.get('account_id')
+            credit_to_acc = int(current_account[:11])
+            CreditTo = Account.objects.get(account_id=credit_to_acc)
 
-        # Find the account_owners
-        user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
-        user_credit = Customer.objects.select_related().get(
-            user=CreditTo.user)
-        trans_id = create_transaction_id()
+            # Find the account_owners
+            user_debit = Customer.objects.select_related().get(user=DebitFrom.user)
+            user_credit = Customer.objects.select_related().get(
+                user=CreditTo.user)
+            trans_id = create_transaction_id()
 
-        # Convert transfer amount to float
-        amount_credit = float(request.POST['Amount'])
-        amount_debit = -float(request.POST['Amount'])
-
-        Ledger.create_transaction(
-            amount_credit, CreditTo, trans_id, user_credit)
-        Ledger.create_transaction(
-            amount_debit, DebitFrom, trans_id, user_debit)
-        status = 'Success'
-        print("success", status)
-        return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
+            if request.POST['Amount'] != '':
+                # Convert transfer amount to float
+                amount_credit = float(request.POST['Amount'])
+                amount_debit = -float(request.POST['Amount'])
+                if current_balance < amount_credit:
+                    status = 'Failed'
+                else:
+                    Ledger.create_transaction(
+                        amount_credit, CreditTo, trans_id, user_credit)
+                    Ledger.create_transaction(
+                        amount_debit, DebitFrom, trans_id, user_debit)
+                    context = {}
+                    print("success", status)
+                    status = 'Success'
+                    # return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
 
     context = {
         'account': int(pk),
         'accounts': Account.objects.exclude(pk=DebitFrom.pk),
-        'balance': float(Account.balance(DebitFrom))
+        'balance': float(Account.balance(DebitFrom)),
+        'status': status
     }
     print(context)
     return render(request, 'banking_templates/make_transaction.html', context)
