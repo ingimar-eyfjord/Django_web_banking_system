@@ -39,7 +39,9 @@
         {% include "banking_templates/transaction_card.html" %}
         {% endif %}
         {% endfor %}
+         {% if request.user.is_staff %}
         <div class="line"></div>
+        {% endif %}
         {% endfor %}
 
 
