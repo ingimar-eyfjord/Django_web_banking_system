@@ -23,6 +23,14 @@
                 {% if balance >= 0 %}
                 <h4 style="color: green;">{{balance}}</h4>
                 {% endif %}
+                {% if  account.account_name == 'NemKonto' %}
+                <p>Deposit amount</p>
+                <form action="" method="POST">
+                       {% csrf_token %}
+                     <label id="accountDeposit" for="deposit">Amount to deposit</label>
+                     <input placeholder="Amount 0.0$" type="number" id="deposit" min="1" name="Amount" >
+                </form>
+                {% endif %}
             </div>
         </div>
     </div>
