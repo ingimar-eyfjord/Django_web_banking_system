@@ -8,18 +8,20 @@ from django.dispatch import receiver
 from .utils import create_account_id, create_transaction_id, return_transaction
 from django.shortcuts import get_object_or_404
 
+
 class Customer(models.Model):
-    user = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
+    user = models.OneToOneField(
+        User, primary_key=True, on_delete=models.PROTECT)
     ranking_choices = [
         ('G', 'Gold'),
         ('S', 'Silver'),
         ('B', 'Basic'),
-        ]
+    ]
     ranking = models.CharField(
-            max_length=15,
-            choices=ranking_choices,
-            default='B',
-            )
+        max_length=15,
+        choices=ranking_choices,
+        default='B',
+    )
     phone_number = models.CharField(max_length=20)
 
     def change_rank(pk, ranking):
@@ -52,27 +54,33 @@ class Customer(models.Model):
         if created:
             Customer.objects.create(user=instance)
 
-    #@receiver(post_save, sender=User)
-    #def save_customer(sender, instance, **kwargs):
+    # @receiver(post_save, sender=User)
+    # def save_customer(sender, instance, **kwargs):
      #   instance.customer.save()
+
+
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    account_name = models.CharField(max_length = 30,editable=True)
+    account_name = models.CharField(max_length=30, editable=True)
     is_loan = models.BooleanField(False)
     account_id = models.CharField(
-            max_length = 5,
-            editable=False,
-            unique=True,
-            default=create_account_id,
-            )
+        max_length=5,
+        editable=False,
+        unique=True,
+        default=create_account_id,
+    )
 
     def open_account(user, is_loan, account_name, Amount):
         accounts = Account.objects.filter(user=user)
-        new_account = Account(user=user, is_loan=is_loan, account_name=account_name)
+        new_account = Account(user=user, is_loan=is_loan,
+                              account_name=account_name)
         new_account.save()
         if is_loan == True:
-            Ledger.create_loan_transaction(new_account, accounts[0], Amount, user)
+            print(new_account.account_id, accounts[0], Amount, user)
+            # print(Ledger.create_loan_transaction())
+            Ledger.create_loan_transaction(
+                new_account.account_id, accounts[0], Amount, user)
 
     def balance(self):
         # This is not working, it says cannot aggregate sum string.
@@ -94,33 +102,35 @@ class Account(models.Model):
         return [transactions, direction]
 
     def __str__(self):
-        return f"{self.account_id}" ### Changed this to only get the Account id because of the create loan / transactions
+        # Changed this to only get the Account id because of the create loan / transactions
+        return f"{self.account_id} - {self.user}"
+
 
 class Ledger(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=225, decimal_places=2)
-    account_owner = models.CharField(max_length = 255)
+    account_owner = models.CharField(max_length=255)
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(
-            max_length = 255,
-            editable=False,
-            )
- #transaction ID must not be uniques because there should be two of them
+        max_length=255,
+        editable=False,
+    )
+ # transaction ID must not be uniques because there should be two of them
 
     def create_transaction(PassedAmount, account_id, trans_id, account_owner):
-        #add here check if balance is direction <= 0 if from
-        transaction = Ledger(amount=PassedAmount, account=account_id, transaction_id=trans_id, account_owner=account_owner)
+        # add here check if balance is direction <= 0 if from
+        transaction = Ledger(amount=PassedAmount, account=account_id,
+                             transaction_id=trans_id, account_owner=account_owner)
         transaction.save()
     # Ledger.create_loan_transaction(new_account, Amount, user)
-    def create_loan_transaction(debit_acc_id, CreditToo, amount, user):
+
+    def create_loan_transaction(debit_acc_id, CreditTo, amount, user):
         DebitFrom = Account.objects.get(account_id=debit_acc_id)
         amount_credit = float(amount)
         amount_debit = -float(amount)
         trans_id = create_transaction_id()
-        Ledger.create_transaction(amount_credit, CreditToo, trans_id, user)
+        Ledger.create_transaction(amount_credit, CreditTo, trans_id, user)
         Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user)
 
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"
-
-
