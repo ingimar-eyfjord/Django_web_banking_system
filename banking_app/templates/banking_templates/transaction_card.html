@@ -1,4 +1,6 @@
 {% load tz %}
+{% load custom_tags %}
+
 <style>
 
 .card .row{
@@ -41,7 +43,12 @@ margin: 5px 0 0 0;
     </div>
     <div class="row">
         <div class="col">
+            {% if request.user.is_staff %}
             <p>{{transaction.account_owner}}</p>
+            {% endif %}
+            {% if request.user.is_staff == False %}
+            <p>{{transaction.customer_view_owner}}</p>
+            {% endif %}
         </div>
         {% if request.user.is_staff %}
         <div class="col">
@@ -50,9 +57,9 @@ margin: 5px 0 0 0;
         {% endif %}
         <div class="col">
             {% if transaction.ledger_amount <= 0 %}
-            <h4 style="color: red;">{{ transaction.ledger_amount }}</h4>
+            <h4 style="color: red;">{{ transaction.ledger_amount|currency }}</h4>
             {% else %}
-            <h4 style="color: green;">{{ transaction.ledger_amount }}</p>
+            <h4 style="color: green;">{{ transaction.ledger_amount|currency }}</h4>
             {% endif %}
         </div>
         <div class="col">

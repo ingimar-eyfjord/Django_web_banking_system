@@ -9,7 +9,7 @@ from datetime import date, datetime
 from .utils import create_transaction_id
 import secrets
 from pprint import pprint
-
+from django.contrib import messages
 
 def index(request):
     user = request.user.username
@@ -28,7 +28,6 @@ def user_account(request, pk):
 
     # this for loop finds and appends balance on the user account
     for x in user_accounts:
-        print(x)
         x.balance = Account.balance(x)
     context = {
         'user': request.user.username,
@@ -122,11 +121,18 @@ def create_account(request):
     pk = request.POST['pk']
     user = get_object_or_404(Customer, pk=pk)
     is_loan = False
+    
     Amount = 0
     account_name = request.POST['account_name']
 
     if request.POST.get('loan', 0):
         is_loan = request.POST['loan']
+
+    if is_loan == 'true':
+        if user.ranking == "Basic":
+            messages.error(request, "User cannot be of type basic")
+            return HttpResponseRedirect(reverse('banking_app:staff_home'))
+
     if request.POST.get('Amount', 0):
         Amount = request.POST['Amount']
 
@@ -134,15 +140,22 @@ def create_account(request):
     accounts = Account.objects.filter(user=user)
     if accounts.count() == 0:
         account_name = "NemKonto"
+        Account.open_account(user=user, account_name=account_name,
+                         is_loan=False, Amount=Amount)
 
     if is_loan == 'true':
         is_loan = True
         account_name = request.POST['loan_type']
+        Account.open_account(user=user, account_name=account_name,
+                         is_loan=is_loan, Amount=Amount)
     else:
         is_loan = False
-
-    Account.open_account(user=user, account_name=account_name,
+    
+    if accounts.count() > 0 and is_loan == False:
+        Account.open_account(user=user, account_name=account_name,
                          is_loan=is_loan, Amount=Amount)
+
+    
     return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
@@ -162,8 +175,6 @@ def view_transactions(request, pk):
     context['balance'] = float(Account.balance(user_account))
     context['transactions'] = get_context[0]
     context['account'] = user_account
-    context['direction'] = get_context[1]
-
     return render(request, 'banking_templates/view_transactions.html', context)
 
 
@@ -197,11 +208,10 @@ def make_transaction(request, pk):
                     status = 'Failed'
                 else:
                     Ledger.create_transaction(
-                        amount_credit, CreditTo, trans_id, user_credit)
+                        amount_credit, CreditTo, trans_id, user_credit, user_debit, user_credit)
                     Ledger.create_transaction(
-                        amount_debit, DebitFrom, trans_id, user_debit)
+                        amount_debit, DebitFrom, trans_id, user_debit, user_debit, user_credit)
                     context = {}
-                    print("success", status)
                     status = 'Success'
                     # return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
 
@@ -211,5 +221,4 @@ def make_transaction(request, pk):
         'balance': float(Account.balance(DebitFrom)),
         'status': status
     }
-    print(context)
     return render(request, 'banking_templates/make_transaction.html', context)
