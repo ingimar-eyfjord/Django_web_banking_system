@@ -155,7 +155,7 @@ def create_account(request):
         Account.open_account(user=user, account_name=account_name,
                          is_loan=is_loan, Amount=Amount)
 
-    
+    messages.success(request, "Accounts created")
     return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
@@ -207,10 +207,8 @@ def make_transaction(request, pk):
                 if current_balance < amount_credit:
                     status = 'Failed'
                 else:
-                    Ledger.create_transaction(
-                        amount_credit, CreditTo, trans_id, user_credit, user_debit, user_credit)
-                    Ledger.create_transaction(
-                        amount_debit, DebitFrom, trans_id, user_debit, user_debit, user_credit)
+                    Ledger.create_transaction(amount_credit, CreditTo, trans_id, user_credit, user_debit, user_credit)
+                    Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user_debit, user_debit, user_credit)
                     context = {}
                     status = 'Success'
                     # return HttpResponseRedirect(reverse('banking_app:make_transaction', kwargs={'pk': pk}))
