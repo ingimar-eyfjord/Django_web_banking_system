@@ -88,11 +88,6 @@ class Account(models.Model):
         balance = 0
         for x in legderObject:
             balance = balance + x.amount
-        context = {
-            'balance':balance,
-            'display_balance': f"{float(x.amount):,}",
-        }
-
         return balance
 
     def get_transactions(self):

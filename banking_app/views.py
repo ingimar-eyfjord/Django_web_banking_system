@@ -138,7 +138,9 @@ def create_account(request):
 
      # Get all accounts of the current user
     accounts = Account.objects.filter(user=user)
+    createFirst = False
     if accounts.count() == 0:
+        createFirst = True
         account_name = "NemKonto"
         Account.open_account(user=user, account_name=account_name,
                          is_loan=False, Amount=Amount)
@@ -151,7 +153,7 @@ def create_account(request):
     else:
         is_loan = False
     
-    if accounts.count() > 0 and is_loan == False:
+    if accounts.count() > 0 and is_loan == False and createFirst == False:
         Account.open_account(user=user, account_name=account_name,
                          is_loan=is_loan, Amount=Amount)
 
