@@ -14,6 +14,6 @@ urlpatterns = [
     path('create_account', views.create_account, name='create_account'),
     path('view_transactions/<int:pk>/', views.view_transactions, name='view_transactions'),
     path('make_transaction/<int:pk>/', views.make_transaction, name='make_transaction'),
-
+    path('account_deposit/', views.account_deposit, name='account_deposit'),
     ]
 

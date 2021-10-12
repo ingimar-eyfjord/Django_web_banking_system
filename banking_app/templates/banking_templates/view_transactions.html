@@ -25,10 +25,11 @@
                 {% endif %}
                 {% if  account.account_name == 'NemKonto' %}
                 <p>Deposit amount</p>
-                <form action="" method="POST">
+                <form action="{% url 'banking_app:account_deposit' %}" method="POST">
                        {% csrf_token %}
                      <label id="accountDeposit" for="deposit">Amount to deposit</label>
-                     <input placeholder="Amount 0.0$" type="number" id="deposit" min="1" name="Amount" >
+                     <input placeholder="Amount 0.0$" type="number" id="deposit" min="1" name="Deposit" >
+                    <button type="submit">Submit</button>
                 </form>
                 {% endif %}
             </div>

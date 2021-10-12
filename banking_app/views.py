@@ -146,6 +146,15 @@ def create_account(request):
     return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
+@login_required
+def account_deposit(request, pk):
+    user_account = Account.objects.get(account_id=pk)
+    Amount = float(Account.balance(user_account))
+    deposit = request.POST['Deposit'] + Amount
+    Account.account_deposit(balance=deposit)
+    return HttpResponseRedirect(reverse('banking_app:view_transactions'))
+
+
 @ login_required
 def change_ranking(request, pk):
     ranking = request.POST['Ranking']
