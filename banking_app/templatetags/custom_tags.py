@@ -4,7 +4,7 @@ from django import template
 register = template.Library()
 
 def currency(amount):
-    balance = f"{float(amount):,}"
+    balance = f"{float(amount):,} DKK"
     return balance
 
 register.filter('currency', currency)
