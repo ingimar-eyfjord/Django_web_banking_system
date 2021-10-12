@@ -28,15 +28,22 @@
 
 <fieldset>
 	<legend>Make a transaction</legend>
-	<p>Status: <span>{{ status }}</span></p>
-	<!-- <p
-		>Status: {% if status == 'Failed' %}<span
-			>Your balance is not sufficient for this transaction </span
-		>{% endif %} {% if status == 'Success' %}<span
-			>Transaction is successful </span
-		>{% endif %}</p
-	> -->
+	<!-- <p>Status: <span>{{ status }}</span></p> -->
+	{% if status == '' %}
+	<p></p>
 	<br />
+	{% endif %} {% if status == 'Failed' %}
+	<p
+		>Status:
+		<span style="color: red"
+			>Your balance is not sufficient for this transaction</span
+		></p
+	>
+	<br />
+	{% endif %} {% if status == 'Success' %}
+	<p>Status: <span style="color: green">Transaction is successful</span></p>
+	<br />
+	{% endif %}
 	<form method="POST" action="{% url 'banking_app:make_transaction' account %}">
 		{% csrf_token %}
 		<label for="account_id">Select account id</label>
