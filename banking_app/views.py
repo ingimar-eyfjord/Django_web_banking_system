@@ -146,15 +146,6 @@ def create_account(request):
     return HttpResponseRedirect(reverse('banking_app:staff_home'))
 
 
-@login_required
-def account_deposit(request, pk):
-    user_account = Account.objects.get(account_id=pk)
-    Amount = float(Account.balance(user_account))
-    deposit = request.POST['Deposit'] + Amount
-    Account.account_deposit(balance=deposit)
-    return HttpResponseRedirect(reverse('banking_app:view_transactions'))
-
-
 @ login_required
 def change_ranking(request, pk):
     ranking = request.POST['Ranking']
@@ -215,3 +206,33 @@ def make_transaction(request, pk):
     }
     print(context)
     return render(request, 'banking_templates/make_transaction.html', context)
+
+@login_required
+def account_deposit(request, pk):
+    status = ''
+
+    #get current account id and balance
+    current_account = Account.get(account_id=pk)
+    current_balance = float(Account.balance(current_account))
+
+    #get Deposit amount from form
+    deposit = float(request.POST['Deposit'])
+
+    #get current user
+    user_deposit = Customer.objects.select_related().get(user=current_account.user)
+    trans_id = create_transaction_id()
+
+    #create transaction
+    Ledger.create_transaction(
+            deposit, current_account, trans_id, user_deposit)
+    status = 'Success'
+    print("success", status)
+    return HttpResponseRedirect(reverse('banking_app:view_transactions', kwargs={'pk': pk}))
+
+    context = {
+            'account': int(pk),
+            'balance': float(Account.balance(current_account))
+            }
+    print(context)
+    return render(request, 'banking_templates/view_transactions.html', context)
+

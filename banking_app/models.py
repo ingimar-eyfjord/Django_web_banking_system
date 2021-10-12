@@ -132,5 +132,10 @@ class Ledger(models.Model):
         Ledger.create_transaction(amount_credit, CreditTo, trans_id, user)
         Ledger.create_transaction(amount_debit, DebitFrom, trans_id, user)
 
+    #account deposit
+    def create_desposit(depositAmount, account_id, trans_id, account_owner):
+        deposit = Ledger(amount=depositAmount, account=account_id, transaction_id=trans_id, account_owner=account_owner)
+        transaction.save()
+
     def __str__(self):
         return f"{self.transaction_id} - {self.transaction_date}"
