@@ -6,6 +6,19 @@
         <p>You are logged in as PayLater employee: {{ user }}</p>
         {% endif %}
         <hr />
+        
+        {% if messages %}
+        <div class="row ">
+            {% for message in messages %}
+            <div class="card messages-{% if message.tags %}{{message.tags}}"{% endif %}">
+                <h4>{{message.tags}}</h4>
+                <hr>
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="row">
             <fieldset style="margin-right: 2rem;">
                 <legend>Create a Customer</legend>
