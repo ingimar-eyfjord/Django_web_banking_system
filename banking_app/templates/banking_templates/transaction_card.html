@@ -1,0 +1,73 @@
+{% load tz %}
+{% load custom_tags %}
+
+<style>
+
+.card .row{
+    margin:0;
+}
+.card .row .col h4, p{
+margin: 5px 0 0 0;
+}
+</style>
+<div style="display:flex; width:100%">
+{% if request.user.is_staff %}
+{% if transaction.account_id == account %}
+{% if transaction.ledger_amount <= 0 %}
+<span style="font-size: 4rem;">⮤</span>
+{% else %}
+<span style="font-size: 4rem; margin:0">↱</span>
+{% endif %}
+{% endif %}
+{% endif %}
+
+<div style="width:100%" class="card">
+    <div class="row">
+        <div class="col">
+            <h4>Account name</h4>
+        </div>
+        {% if request.user.is_staff %}
+        <div class="col">
+            <h4>Account id</h4>
+        </div>
+        {% endif %}
+        <div class="col">
+        <h4>Amount</h4>
+        </div>
+        <div class="col">
+        <h4>Transaction number</h4>
+        </div>
+        <div class="col">
+            <h4>Transaction date</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if request.user.is_staff %}
+            <p>{{transaction.account_owner}}</p>
+            {% endif %}
+            {% if request.user.is_staff == False %}
+            <p>{{transaction.customer_view_owner}}</p>
+            {% endif %}
+        </div>
+        {% if request.user.is_staff %}
+        <div class="col">
+            <p>{{transaction.account_id|truncatechars:11}}</p>
+        </div>
+        {% endif %}
+        <div class="col">
+            {% if transaction.ledger_amount <= 0 %}
+            <h4 style="color: red;">{{ transaction.ledger_amount|currency }}</h4>
+            {% else %}
+            <h4 style="color: green;">{{ transaction.ledger_amount|currency }}</h4>
+            {% endif %}
+        </div>
+        <div class="col">
+        <p style="word-break: break-all;">{{transaction.transaction_id}}</p>
+        </div>
+        <div class="col">
+        <p> {{transaction.transaction_date|timezone:"Europe/Copenhagen"}} </p>
+        </div>
+    </div>
+</div>
+</div>
