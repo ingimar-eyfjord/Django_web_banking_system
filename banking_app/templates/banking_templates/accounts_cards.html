@@ -1,0 +1,61 @@
+{% load custom_tags %}
+
+<style>
+
+    .card .row{
+        margin:0;
+    }
+    .card .row .col h4, p{
+    margin: 5px 0 0 0;
+    }
+</style>
+
+<div class="card">
+    <div class="row">
+        <div class="col">
+            <h4>Account name</h4>
+        </div>
+        <div class="col">
+            <h4>Account number</h4>
+        </div>
+        <div class="col">
+        <h4>Balance</h4>
+        </div>
+        </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <p>{{ account.account_name }}</p>
+        </div>
+    <div class="col">
+    <p>{{ account.account_id }}</p>
+    </div>
+    <div class="col">
+            {% if account.balance <= 0 %}
+            <h4 style="color: red;">{{ account.balance|currency }}</h4>
+            {% endif %}
+            {% if account.balance > 0 %}
+            <h4 style="color: green;">{{ account.balance|currency }}</h4>
+            {% endif %}
+    </div>
+    </div>
+    <div class="row">
+        {% if account.is_loan == True %}
+        <div class="col">
+        <a>Manage loan</a>
+    </div>
+        {% else %}
+        <div class="col">
+            <a href="{% url 'banking_app:make_transaction' account.account_id  %}"">Make a transaction</a>
+        </div>
+        {% endif %}
+        <div class="col">
+            <a href="{% url 'banking_app:view_transactions' account.account_id  %}">View transactions</a>
+        </div>
+        <div class="col">
+            {% if account.is_loan == False %}
+            <a>Take out loan</a>
+            {% endif %}
+        </div>
+    </div>
+   </div>

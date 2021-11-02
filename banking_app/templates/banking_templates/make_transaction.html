@@ -1,0 +1,67 @@
+{% extends "banking_templates/base.html" %} {% block content %}
+<style>
+	.card .row {
+		margin: 0;
+	}
+	.card .row .col h4,
+	p {
+		margin: 5px 0 0 0;
+	}
+</style>
+<hr />
+<h5>You are now making a transaction from account number: {{account}}</h5>
+<hr />
+
+<div class="card">
+	<div class="row">
+		<div class="col">
+			<h4>Account balance</h4>
+			{% if balance <= 0 %}
+			<h4 style="color: red">{{balance}}</h4>
+			{% endif %} {% if balance > 0 %}
+			<h4 style="color: green">{{balance}}</h4>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<br />
+
+<fieldset>
+	<legend>Make a transaction</legend>
+	<!-- <p>Status: <span>{{ status }}</span></p> -->
+	{% if status == '' %}
+	<p></p>
+	<br />
+	{% endif %} {% if status == 'Failed' %}
+	<p
+		>Status:
+		<span style="color: red"
+			>Your balance is not sufficient for this transaction</span
+		></p
+	>
+	<br />
+	{% endif %} {% if status == 'Success' %}
+	<p>Status: <span style="color: green">Transaction is successful</span></p>
+	<br />
+	{% endif %}
+	<form method="POST" action="{% url 'banking_app:make_transaction' account %}">
+		{% csrf_token %}
+		<label for="account_id">Select account id</label>
+		<select
+			name="account_id"
+			id="account_id"
+			placeholder="Customer name; customer phone number; customer id"
+		>
+			{% for acc in accounts %}
+			<option value="{{ acc }}"
+				>{{ acc.account_id }} {{acc.account_name}} {{acc.user}}
+			</option>
+			{% endfor %}
+		</select>
+		<label for="Amount">Amount to transfer</label>
+		<input type="text" name="Amount" placeholder="Amount" id="Amount" />
+		<button type="submit">Make transfer</button>
+	</form>
+</fieldset>
+
+{% endblock %}

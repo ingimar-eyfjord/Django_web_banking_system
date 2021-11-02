@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://classless.de/classless.css">
+        <title>PayLater Bank | Create a customer</title>
+    </head>
+    <body>
+        <h1>Create a customer</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="user" placeholder="Your username" />
+            <input type="password" name="password" placeholder="Enter your password" />
+            <input type="password" name="confirm_password" placeholder="Re-enter your password" />
+            <button type="submit">Create</button>
+        </form>
+
+        <hr />
+    </body>
+</html>
