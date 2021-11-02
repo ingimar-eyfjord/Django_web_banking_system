@@ -9,17 +9,23 @@
 .card .row .col h4, p{
 margin: 5px 0 0 0;
 }
+.upArrow::before{
+content: '\U+21c3';
+}
+.downArrow::before{
+    content: '\U+21bf';
+}
 </style>
 <div style="display:flex; width:100%">
-{% if request.user.is_staff %}
+{% comment %} {% if request.user.is_staff %}
 {% if transaction.account_id == account %}
 {% if transaction.ledger_amount <= 0 %}
-<span style="font-size: 4rem;">⮤</span>
+<span class="downArrow" style="font-size: 4rem;"></span>
 {% else %}
-<span style="font-size: 4rem; margin:0">↱</span>
+<span class="upArrow" style="font-size: 4rem; margin:0"></span>
 {% endif %}
 {% endif %}
-{% endif %}
+{% endif %} {% endcomment %}
 
 <div style="width:100%" class="card">
     <div class="row">
