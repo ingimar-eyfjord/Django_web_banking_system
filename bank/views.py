@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from .forms import TransferForm, UserForm, CustomerForm, NewUserForm, NewAccountForm
 from .models import Account, Ledger, Customer
 from .errors import InsufficientFunds
-from .serializers import LedgerSerializer
+from api import serializers
 from rest_framework import generics
 # from rest_framework.decorators import api_view 
 # from rest_framework.response import Response
@@ -237,7 +237,7 @@ def staff_new_customer(request):
 
 class Api_create_transaction(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ledger.objects.all()
-    serializer_class = LedgerSerializer
+    serializer_class = serializers.LedgerSerializer
 
 # @api_view(['GET', 'POST', 'DELETE'])
 # def api_transfers(request):
