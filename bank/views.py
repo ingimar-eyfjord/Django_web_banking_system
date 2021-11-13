@@ -1,5 +1,6 @@
 from decimal import Decimal
 from secrets import token_urlsafe
+from django.db.models.query import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse, get_object_or_404
 from django.contrib.auth.models import User
@@ -9,6 +10,15 @@ from django.db import IntegrityError
 from .forms import TransferForm, UserForm, CustomerForm, NewUserForm, NewAccountForm
 from .models import Account, Ledger, Customer
 from .errors import InsufficientFunds
+from . import serializers
+from rest_framework import generics
+from rest_framework.decorators import api_view 
+from rest_framework.response import Response
+
+
+# from snippets.serializers import SnippetSerializer
+from rest_framework import status
+# from snippets.models import Snippet
 
 
 @login_required
@@ -222,3 +232,19 @@ def staff_new_customer(request):
         'customer_form': customer_form,
     }
     return render(request, 'bank/staff_new_customer.html', context)
+
+    ## API view functions
+
+@api_view(['GET', 'POST', 'DELETE'])
+def api_transfers(request):
+    if request.method == 'GET':
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = SnippetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

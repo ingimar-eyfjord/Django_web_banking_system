@@ -6,4 +6,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('bank.urls')),
+    path('api/v1/', include('bank.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 ]
