@@ -7,11 +7,14 @@ class LedgerSerializer(serializers.ModelSerializer):
         model = Ledger
         fields = '__all__'
 
-    def rest_create_transaction(self, validated_data):
+    def rest_create_transaction(self, data):
+        print(data)
+        # transaction = Ledger(
+        # )
         pass
 
-    def rest_cancel_transaction(self, validated_data):
+    def rest_cancel_transaction(self, data):
         pass
 
-    def rest_confirm_transaction(self, validated_data):
+    def rest_confirm_transaction(self, data):
         pass

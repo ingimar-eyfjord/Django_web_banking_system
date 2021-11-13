@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'bank',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'rest_auth'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

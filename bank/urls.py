@@ -21,6 +21,6 @@ urlpatterns = [
     path('staff_new_account_partial/<int:user>/', views.staff_new_account_partial, name='staff_new_account_partial'),
     path('staff_new_customer/', views.staff_new_customer, name='staff_new_customer'),
 
-    # path('transaction/create/account/<int:pk>/ammount/<int>', views.make_transfer.as_view()),
-    # path('transaction/receive/account/<int:pk>/ammount/<int>', views.make_transfer.as_view()),
+    path('transaction/create/account/<int:pk>/ammount/<int>', views.Api_create_transaction.as_view()),
+    path('transaction/receive/account/<int:pk>/ammount/<int>', views.Api_create_transaction.as_view()),
 ]

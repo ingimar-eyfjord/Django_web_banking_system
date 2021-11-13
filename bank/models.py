@@ -19,8 +19,8 @@ class UID(models.Model):
 
 
 class Rank(models.Model):
-    name        = models.CharField(max_length=35, unique=True, db_index=True)
-    value       = models.IntegerField(unique=True, db_index=True)
+    name = models.CharField(max_length=35, unique=True, db_index=True)
+    value = models.IntegerField(unique=True, db_index=True)
 
     @classmethod
     def default_rank(cls) -> Rank:
@@ -31,10 +31,11 @@ class Rank(models.Model):
 
 
 class Customer(models.Model):
-    user        = models.OneToOneField(User, primary_key=True, on_delete=models.PROTECT)
-    rank        = models.ForeignKey(Rank, default=2, on_delete=models.PROTECT)
+    user = models.OneToOneField(
+        User, primary_key=True, on_delete=models.PROTECT)
+    rank = models.ForeignKey(Rank, default=2, on_delete=models.PROTECT)
     personal_id = models.IntegerField(db_index=True)
-    phone       = models.CharField(max_length=35, db_index=True)
+    phone = models.CharField(max_length=35, db_index=True)
 
     @property
     def full_name(self) -> str:
@@ -68,11 +69,11 @@ class Customer(models.Model):
     @classmethod
     def search(cls, search_term):
         return cls.objects.filter(
-            Q(user__username__contains=search_term)   |
+            Q(user__username__contains=search_term) |
             Q(user__first_name__contains=search_term) |
-            Q(user__last_name__contains=search_term)  |
-            Q(user__email__contains=search_term)      |
-            Q(personal_id__contains=search_term)      |
+            Q(user__last_name__contains=search_term) |
+            Q(user__email__contains=search_term) |
+            Q(personal_id__contains=search_term) |
             Q(phone__contains=search_term)
         )[:15]
 
@@ -81,8 +82,8 @@ class Customer(models.Model):
 
 
 class Account(models.Model):
-    user        = models.ForeignKey(User, on_delete=models.PROTECT)
-    name        = models.CharField(max_length=50, db_index=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    name = models.CharField(max_length=50, db_index=True)
 
     class Meta:
         get_latest_by = 'pk'
@@ -100,11 +101,20 @@ class Account(models.Model):
 
 
 class Ledger(models.Model):
-    account     = models.ForeignKey(Account, on_delete=models.PROTECT)
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
     transaction = models.ForeignKey(UID, on_delete=models.PROTECT)
-    amount      = models.DecimalField(max_digits=10, decimal_places=2)
-    timestamp   = models.DateTimeField(auto_now_add=True, db_index=True)
-    text        = models.TextField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    text = models.TextField()
+    ranking_choices = [
+        ('P', 'Pending'),
+        ('C', 'Completed'),
+    ]
+    status = models.CharField(
+        max_length=15,
+        choices=ranking_choices,
+        default='C',
+    )
 
     @classmethod
     def transfer(cls, amount, debit_account, debit_text, credit_account, credit_text, is_loan=False) -> int:
@@ -112,8 +122,10 @@ class Ledger(models.Model):
         with transaction.atomic():
             if debit_account.balance >= amount or is_loan:
                 uid = UID.uid
-                cls(amount=-amount, transaction=uid, account=debit_account, text=debit_text).save()
-                cls(amount=amount, transaction=uid, account=credit_account, text=credit_text).save()
+                cls(amount=-amount, transaction=uid,
+                    account=debit_account, text=debit_text).save()
+                cls(amount=amount, transaction=uid,
+                    account=credit_account, text=credit_text).save()
             else:
                 raise InsufficientFunds
         return uid
