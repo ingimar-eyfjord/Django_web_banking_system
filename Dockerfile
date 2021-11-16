@@ -1,7 +1,17 @@
-# syntax=docker/dockerfile:1
-FROM python:3
+FROM python:3.9-slim-buster
+
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-WORKDIR /code
-COPY requirements.txt /code/
+
+RUN apt-get update && \
+    apt-get install -y libpq-dev python3-dev python-dev python-psycopg2 python3-psycopg2 gcc
+
+ADD requirements.txt /
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY . /code/
+
+WORKDIR /app
+COPY . /app
+
+COPY ./entrypoint.sh /
+ENTRYPOINT ["sh", "/entrypoint.sh"]
