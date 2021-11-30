@@ -3,9 +3,49 @@ from decimal import Decimal
 from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Q
+from django.db.models.deletion import PROTECT
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from .errors import InsufficientFunds
+import random
+
+class BankUID(models.Model):
+    @classmethod
+    @property
+    def uid(cls):
+        id = models.UUIDField(primary_key=True, editable=False)
+        ids = cls.objects.all()
+        newID = str(random.randint(4000, 5000))
+        if len(ids) == 0:
+            return cls.objects.create(id=newID)
+        else:
+            for id in ids:
+                if newID != id:
+                    return cls.objects.create(id=newID)
+                else:
+                    continue
+
+    def __str__(self):
+        return f'{self.pk}'
+
+class AccountUID(models.Model):
+    @classmethod
+    @property
+    def uid(cls):
+        id = models.UUIDField(primary_key=True, editable=False)
+        ids = cls.objects.all()
+        newID = str(random.randint(40000, 50000))
+        if len(ids) == 0:
+            return cls.objects.create(id=newID)
+        else:
+            for id in ids:
+                if newID != id:
+                    return cls.objects.create(id=newID)
+                else:
+                    continue
+
+    def __str__(self):
+        return f'{self.pk}'
 
 
 class UID(models.Model):
@@ -16,7 +56,6 @@ class UID(models.Model):
 
     def __str__(self):
         return f'{self.pk}'
-
 
 class Rank(models.Model):
     name = models.CharField(max_length=35, unique=True, db_index=True)
@@ -80,8 +119,17 @@ class Customer(models.Model):
     def __str__(self):
         return f'{self.personal_id}: {self.full_name}'
 
+class Banks(models.Model):
+    bank_number = models.OneToOneField(BankUID, primary_key=True, on_delete=models.PROTECT)
+    bank_name = models.TextField()
+    bank_ip_address = models.TextField()
+
+    def __str__(self):
+        return f'{self.pk} :|: {self.bank_number} :|: {self.bank_name} :|: {self.bank_ip_address}'
+
 
 class Account(models.Model):
+    account_number = models.OneToOneField(AccountUID, primary_key=True, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     name = models.CharField(max_length=50, db_index=True)
 
@@ -100,9 +148,11 @@ class Account(models.Model):
         return f'{self.pk} :: {self.user} :: {self.name}'
 
 
+
 class Ledger(models.Model):
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     transaction = models.ForeignKey(UID, on_delete=models.PROTECT)
+    bank_number = models.ForeignKey(Banks, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
     text = models.TextField()
@@ -117,18 +167,18 @@ class Ledger(models.Model):
     )
 
     @classmethod
-    def transfer(cls, amount, debit_account, debit_text, credit_account, credit_text, is_loan=False) -> int:
+    def transfer(cls, amount, debit_account, bank_number_debit, debit_text, credit_account, bank_number_credit, credit_text, is_loan=False,) -> int:
         assert amount >= 0, 'Negative amount not allowed for transfer.'
         with transaction.atomic():
             if debit_account.balance >= amount or is_loan:
                 uid = UID.uid
                 cls(amount=-amount, transaction=uid,
-                    account=debit_account, text=debit_text).save()
+                    account=debit_account, text=debit_text, bank_number=bank_number_debit).save()
                 cls(amount=amount, transaction=uid,
-                    account=credit_account, text=credit_text).save()
+                    account=credit_account, text=credit_text,bank_number=bank_number_credit).save()
             else:
                 raise InsufficientFunds
         return uid
 
     def __str__(self):
-        return f'{self.amount} :: {self.transaction} :: {self.timestamp} :: {self.account} :: {self.text}'
+        return f'{self.amount} :|: {self.transaction} :|: {self.timestamp} :|: {self.account} :|: {self.text}'

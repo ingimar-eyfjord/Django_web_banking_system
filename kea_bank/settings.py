@@ -45,12 +45,13 @@ INSTALLED_APPS = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        # 'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.AllowAny'
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES':[
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
-    ]
+    # 'DEFAULT_AUTHENTICATION_CLASSES':[
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication'
+    # ]
 }
 
 MIDDLEWARE = [
@@ -89,8 +90,14 @@ WSGI_APPLICATION = 'kea_bank.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Bank',
+        'USER' : 'postgres',
+        'PASSWORD' : '6068',
+        'HOST' : 'localhost'
     }
 }
 

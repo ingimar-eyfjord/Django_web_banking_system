@@ -8,9 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from .forms import TransferForm, UserForm, CustomerForm, NewUserForm, NewAccountForm
-from .models import Account, Ledger, Customer
+from .models import Account, Ledger, Customer, UID, BankUID, AccountUID
 from .errors import InsufficientFunds
 from api import serializers
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework import generics
 # from rest_framework.decorators import api_view 
 # from rest_framework.response import Response
@@ -187,7 +190,8 @@ def staff_new_account_partial(request, user):
     if request.method == 'POST':
         new_account_form = NewAccountForm(request.POST)
         if new_account_form.is_valid():
-            Account.objects.create(user=User.objects.get(pk=user), name=new_account_form.cleaned_data['name'])
+            account_num = AccountUID.uid
+            Account.objects.create(account_number=account_num.pk,user=User.objects.get(pk=user), name=new_account_form.cleaned_data['name'])
     return HttpResponseRedirect(reverse('bank:staff_customer_details', args=(user,)))
 
 
@@ -235,11 +239,29 @@ def staff_new_customer(request):
 
     # API view functions
 
-class Api_create_transaction(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Ledger.objects.all()
-    serializer_class = serializers.LedgerSerializer
+class Api_create_transaction(generics.CreateAPIView):
+    
+    def post(self, request):
+        uid = UID.uid
+        request.data._mutable = True
+        request.POST['transaction'] = uid.pk
+        request.data._mutable = False
+        queryset = Ledger.objects.all()
+        serializer_class = serializers.LedgerSerializer(data=request.data)
+        if serializer_class.is_valid():
+            # print(request)
+            # serializer_class.save()
+            bankID = BankUID.uid
+            return Response({"status": "success", "data": request.data}, status=status.HTTP_200_OK)
 
-# @api_view(['GET', 'POST', 'DELETE'])
+            # return Response({"status": "success", "data": serializer_class.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer_class.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 # def api_transfers(request):
 #     if request.method == 'GET':
 #         snippets = Snippet.objects.all()
