@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from .forms import TransferForm, UserForm, CustomerForm, NewUserForm, NewAccountForm
-from .models import Account, Ledger, Customer, UID, BankUID, AccountUID
+from .models import Account, Ledger, Customer, UID, BankUID, AccountUID, Banks
 from .errors import InsufficientFunds
 from api import serializers
 from rest_framework.views import APIView
@@ -37,7 +37,6 @@ def index(request):
 @login_required
 def dashboard(request):
     assert not request.user.is_staff, 'Staff user routing customer view.'
-
     accounts = request.user.customer.accounts
     context = {
         'accounts': accounts,
@@ -93,6 +92,8 @@ def make_transfer(request):
     else:
         form = TransferForm()
     form.fields['debit_account'].queryset = request.user.customer.accounts
+
+    # form.fields['bank_number'] = Banks.objects.get()
     context = {
         'form': form,
     }

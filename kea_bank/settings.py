@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
+ASGI_APPLICATION = "kea_bank.asgi.application"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'bank',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth'
+    'rest_auth',
+    'channels'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

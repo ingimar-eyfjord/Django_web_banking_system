@@ -125,8 +125,7 @@ class Banks(models.Model):
     bank_ip_address = models.TextField()
 
     def __str__(self):
-        return f'{self.pk} :|: {self.bank_number} :|: {self.bank_name} :|: {self.bank_ip_address}'
-
+        return f'Bank number {self.pk} | {self.bank_name}'
 
 class Account(models.Model):
     account_number = models.OneToOneField(AccountUID, primary_key=True, on_delete=models.PROTECT)
