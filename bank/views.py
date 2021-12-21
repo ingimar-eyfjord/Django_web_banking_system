@@ -250,11 +250,14 @@ class Api_create_transaction(generics.CreateAPIView):
         queryset = Ledger.objects.all()
         serializer_class = serializers.LedgerSerializer(data=request.data)
         if serializer_class.is_valid():
+            print(request.POST)
+            if not queryset.POST['credit_account']:
+                return Response({"status": "error", "data": serializer_class.errors}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"status": "success", "data": request.data}, status=status.HTTP_200_OK)
             # print(request)
             # serializer_class.save()
-            bankID = BankUID.uid
-            return Response({"status": "success", "data": request.data}, status=status.HTTP_200_OK)
-
+            ## HARD CODE OUR BANK UID IN HERE NOW, ADD TO ENV LATER.
             # return Response({"status": "success", "data": serializer_class.data}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "error", "data": serializer_class.errors}, status=status.HTTP_400_BAD_REQUEST)

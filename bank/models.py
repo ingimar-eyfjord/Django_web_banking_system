@@ -155,13 +155,13 @@ class Ledger(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
     text = models.TextField()
-    ranking_choices = [
+    status_choices = [
         ('P', 'Pending'),
         ('C', 'Completed'),
     ]
     status = models.CharField(
         max_length=15,
-        choices=ranking_choices,
+        choices=status_choices,
         default='C',
     )
 
