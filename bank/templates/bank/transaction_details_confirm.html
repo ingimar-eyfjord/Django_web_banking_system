@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<p>Welcome, {{ user.customer.full_name }}.</p>
+
+{% if status == 401 %}
+
+<h3>Something went wrong</h3>
+<a href="."><button>Go back</button></a>
+
+{% endif %}
+
+{% if status == 500 %}
+
+<h3>The recipients account does not exist</h3>
+<a href="."><button>Go back</button></a>
+
+{% endif %}
+
+
+
+{% if status == 200 %}
+<h3>Transaction Details</h3>
+<table>
+    <tr>
+        <th>Account Owner</th>
+        <th>Account Number</th>
+        <th>Bank</th>
+        <th>Bank Number</th>
+        <th>Transaction UID</th>
+        <th>Amount</th>
+        <th>Date and Time</th>
+        <th>Text</th>
+    </tr>
+    {% for movement in movements %}
+    <tr>
+        <td>{{ movement.account.user }}</td>
+        <td>{{ movement.account.account_number }}</td>
+        <td>{{ movement.bank_number.bank_name }}</td>
+        <td>{{ movement.bank_number.bank_number }}</td>
+        <td>{{ movement.transaction }}</td>
+        <td>{{ movement.amount|floatformat:"2" }}</td>
+        <td>{{ movement.timestamp }}</td>
+        <td>{{ movement.text }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{{to|slugify}}
+
+<h3>Please confirm your transaction before continuing</h3>
+<button>Confirm</button>
+<h3>Or cancel</h3>
+<button>Cancel</button>
+
+{% endif %}
+
+{% endblock main %}

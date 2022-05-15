@@ -1,0 +1,33 @@
+stages:
+  - static-python
+  - static-scripts
+  - build-app
+
+static-python:
+  image: python:3.9-alpine
+  stage: static-python
+  before_script:
+    - pip install pylama pytest
+  script:
+    - pylama
+
+static-scripts:
+  image: alpine:latest
+  stage: static-scripts
+  before_script:
+    - apk add fd git shellcheck yamllint
+  script:
+    - shellcheck "$(fd .sh .)" 
+    - yamllint "$(fd .yml .)"
+
+build-app:
+  image: docker
+  stage: build-app
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u gitlab-ci-token -p "$GITLAB_CI_TOKEN" "$CI_REGISTRY"
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+    
