@@ -1,10 +1,6 @@
 # Web Bank
 A banking system with transactional data, user managment, double authentication, API capable transactions.
 
-## Introduction
-
-This is a code documentation for the `Django_web_banking_system` repository on GitHub. This repository contains a web-based banking system built with Django and Docker.
-
 ## Usage
 
 To run this project, you will need to have Docker and Docker Compose installed on your machine. Once you have installed Docker and Docker Compose, you can run the following command in the root directory of the project to start the containers:
